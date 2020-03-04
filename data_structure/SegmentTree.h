@@ -31,14 +31,14 @@ public:
         vec.resize(sz * 2, ID);
         set_array(_vec);
     }
-    void set_value(int _idx, T _val) {
+    void set_value(int _idx, T _val) noexcept {
         vec[_idx + sz] = _val;
     }
     template <class RandomIt>
-    void set_array(RandomIt _begin, RandomIt _end) {
+    void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
     }
-    void set_array(const std::vector<T>& _newvec) {
+    void set_array(const std::vector<T>& _newvec) noexcept {
         set_array(_newvec.begin(), _newvec.end());
     }
     void build() noexcept {
@@ -46,14 +46,14 @@ public:
             vec[i] = op(vec[i * 2], vec[i * 2 + 1]);
         }
     }
-    void update(int _idx, T _val) {
+    void update(int _idx, T _val) noexcept {
         _idx += sz;
         vec[_idx] = _val;
         for (_idx >>= 1; _idx > 0; _idx >>= 1) {
             vec[_idx] = op(vec[_idx * 2], vec[_idx * 2 + 1]);
         }
     }
-    T query(int _l, int _r) const {
+    T query(int _l, int _r) const noexcept {
         T l_val = ID, r_val = ID;
         _l += sz, _r += sz - 1;
         for (; _l <= _r; _l >>= 1, _r >>= 1) {
@@ -62,7 +62,7 @@ public:
         }
         return op(l_val, r_val);
     }
-    const T& operator[](int _idx) {
+    const T& operator[](int _idx) const noexcept {
         return vec[_idx + sz];
     }
 };

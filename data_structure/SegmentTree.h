@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
 
-// セグメント木 SegmentTree<T>
+// セグメント木 SegmentTree<T, Op>
+//     T: 配列の要素の型, Op: 二項演算関数の型
 // arguments:
 //     _n: 要素数, _op: 二項演算, _identity: 単位元
 // 時間計算量：
 //     構築: O(N)
 //     クエリ, 更新: O(log N)
-template <class T>
+template <class T, class Op>
 class SegmentTree {
-    using Op = std::function<T(T, T)>;
-
 private:
     const Op op;
     const T ID;

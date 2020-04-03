@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "ModInt.h"
 
 // 二項係数(mod)
@@ -35,4 +36,5 @@ public:
     }
 
     ModInt<Modulus> get_fac(i64 n) { return ModInt<Modulus>(fac[n]); }
+    ModInt<Modulus> get_finv(i64 n) { return ModInt<Modulus>(finv[n]); }
 };

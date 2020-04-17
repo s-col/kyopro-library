@@ -1,30 +1,36 @@
 #include <bits/stdc++.h>
 
-template <typename _Ty>
 class UnionFind {
+    using i64 = std::int64_t;
+
 private:
-    vector<_Ty> par;
-    vector<_Ty> sz;
+    std::vector<i64> par;
+    std::vector<i64> sz;
 
 public:
-    UnionFind(_Ty N) : par(N), sz(N, 1) {
-        for (_Ty i = 0; i < N; ++i) par[i] = i;
+    UnionFind(i64 N) : par(N), sz(N, 1) {
+        for (i64 i = 0; i < N; ++i) par[i] = i;
     }
-    _Ty root(_Ty x) {
+    i64 root(i64 x) {
         return par[x] == x ? x : par[x] = root(par[x]);
     }
-    bool same(_Ty x, _Ty y) {
+    bool same(i64 x, i64 y) {
         return root(x) == root(y);
     }
-    void unite(_Ty x, _Ty y) {
+    void unite(i64 x, i64 y) {
         x = root(x);
         y = root(y);
         if (x == y) return;
-        if (sz[x] < sz[y]) swap(x, y);
+        if (sz[x] < sz[y]) std::swap(x, y);
         par[y] = x;
         sz[x] += sz[y];
     }
-    _Ty size(_Ty x) {
+    i64 size(i64 x) {
         return sz[root(x)];
+    }
+    void reset(i64 N) {
+        par.resize(N);
+        for (i64 i = 0; i < N; ++i) par[i] = i;
+        sz.assign(N, 1);
     }
 };

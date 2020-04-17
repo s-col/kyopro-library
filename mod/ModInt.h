@@ -80,9 +80,9 @@ public:
         while (b) {
             i64 t = q / b;
             q -= t * b;
-            swap(q, b);
+            std::swap(q, b);
             u -= t * v;
-            swap(u, v);
+            std::swap(u, v);
         }
         u %= Modulus;
         if (u < 0) u += Modulus;

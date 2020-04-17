@@ -1,46 +1,19 @@
 #include <bits/stdc++.h>
 
 // ModInt
-//
-// 宣言:
-// ModInt<1000000007> mi;
-// ModInt<1000000007> mi(917856986);
-//
 template <std::int_fast64_t Modulus>
 class ModInt {
     using i64 = std::int_fast64_t;
-
-    // friend
-    template <std::int_fast64_t _MOD>
-    friend std::istream& operator>>(std::istream& is, ModInt<_MOD>& rhs);
-    template <std::int_fast64_t _MOD>
-    friend std::ostream& operator<<(std::ostream& os, const ModInt<_MOD>& rhs);
 
 private:
     i64 m_value;
 
 public:
-    /**
-     * コンストラクタ
-     */
     constexpr ModInt(const i64 x = 0) noexcept : m_value(x % Modulus) {
         if (m_value < 0) m_value += Modulus;
     }
 
     constexpr const i64& value() const noexcept { return m_value; }
-
-    constexpr ModInt operator+(const ModInt& rhs) const noexcept {
-        return ModInt(*this) += rhs;
-    }
-    constexpr ModInt operator-(const ModInt& rhs) const noexcept {
-        return ModInt(*this) -= rhs;
-    }
-    constexpr ModInt operator*(const ModInt& rhs) const noexcept {
-        return ModInt(*this) *= rhs;
-    }
-    constexpr ModInt operator/(const ModInt& rhs) const noexcept {
-        return ModInt(*this) /= rhs;
-    }
 
     constexpr ModInt& operator+=(const ModInt rhs) noexcept {
         m_value += rhs.m_value;
@@ -91,22 +64,6 @@ public:
         return res;
     }
 
-    constexpr bool operator<(const ModInt& rhs) const noexcept {
-        return m_value < rhs.m_value;
-    }
-    constexpr bool operator>(const ModInt& rhs) const noexcept {
-        return m_value > rhs.m_value;
-    }
-    constexpr bool operator<=(const ModInt& rhs) const noexcept {
-        return m_value <= rhs.m_value;
-    }
-    constexpr bool operator>=(const ModInt& rhs) const noexcept {
-        return m_value >= rhs.m_value;
-    }
-    constexpr bool operator==(const ModInt& rhs) const noexcept {
-        return m_value == rhs.m_value;
-    }
-
     constexpr ModInt pow(i64 k) const noexcept {
         ModInt res = 1;
         ModInt tmp = *this;
@@ -117,7 +74,7 @@ public:
         return res;
     }
 
-    constexpr ModInt inverse() const noexcept {
+    constexpr ModInt inv() const noexcept {
         i64 q = m_value;
         i64 b = Modulus, u = 1, v = 0;
         while (b) {
@@ -131,16 +88,48 @@ public:
         if (u < 0) u += Modulus;
         return u;
     }
-};
 
-// iostream用の関数[ModInt]
-template <std::int_fast64_t Modulus>
-std::istream& operator>>(std::istream& is, ModInt<Modulus>& rhs) {
-    is >> rhs.m_value;
-    return is;
-}
-template <std::int_fast64_t Modulus>
-std::ostream& operator<<(std::ostream& os, const ModInt<Modulus>& rhs) {
-    os << rhs.m_value;
-    return os;
-}
+    friend constexpr ModInt operator+(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return ModInt<Modulus>(lhs) += rhs;
+    }
+    friend constexpr ModInt operator-(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return ModInt<Modulus>(lhs) -= rhs;
+    }
+    friend constexpr ModInt operator*(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return ModInt<Modulus>(lhs) *= rhs;
+    }
+    friend constexpr ModInt operator/(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return ModInt<Modulus>(lhs) /= rhs;
+    }
+
+    friend constexpr ModInt operator<(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value < rhs.m_value;
+    }
+    friend constexpr ModInt operator>(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value > rhs.m_value;
+    }
+    friend constexpr ModInt operator<=(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value <= rhs.m_value;
+    }
+    friend constexpr ModInt operator>=(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value >= rhs.m_value;
+    }
+
+    friend constexpr ModInt operator==(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value == rhs.m_value;
+    }
+    friend constexpr ModInt operator!=(const ModInt& lhs, const ModInt& rhs) noexcept {
+        return lhs.m_value != rhs.m_value;
+    }
+
+    friend std::istream& operator>>(std::istream& is, ModInt& rhs) {
+        i64 a;
+        is >> a;
+        rhs = a;
+        return is;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const ModInt& rhs) {
+        os << rhs.m_value;
+        return os;
+    }
+};

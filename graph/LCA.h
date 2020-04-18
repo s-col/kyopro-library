@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "template.h"
 
 // LCA
@@ -76,4 +77,6 @@ public:
 
         return m_parent[0][u];
     }
+
+    int parent(int idx, int d) { return m_parent[d][idx]; }
 };

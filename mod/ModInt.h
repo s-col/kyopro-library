@@ -102,23 +102,23 @@ public:
         return ModInt<Modulus>(lhs) /= rhs;
     }
 
-    friend constexpr ModInt operator<(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator<(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value < rhs.m_value;
     }
-    friend constexpr ModInt operator>(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator>(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value > rhs.m_value;
     }
-    friend constexpr ModInt operator<=(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator<=(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value <= rhs.m_value;
     }
-    friend constexpr ModInt operator>=(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator>=(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value >= rhs.m_value;
     }
 
-    friend constexpr ModInt operator==(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator==(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value == rhs.m_value;
     }
-    friend constexpr ModInt operator!=(const ModInt& lhs, const ModInt& rhs) noexcept {
+    friend constexpr bool operator!=(const ModInt& lhs, const ModInt& rhs) noexcept {
         return lhs.m_value != rhs.m_value;
     }
 

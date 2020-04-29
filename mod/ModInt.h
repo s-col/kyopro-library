@@ -64,16 +64,6 @@ public:
         return res;
     }
 
-    constexpr ModInt pow(i64 k) const noexcept {
-        ModInt res = 1;
-        ModInt tmp = *this;
-        for (; k > 0; k >>= 1) {
-            if (k & 1) res *= tmp;
-            tmp *= tmp;
-        }
-        return res;
-    }
-
     constexpr ModInt inv() const noexcept {
         i64 q = m_value;
         i64 b = Modulus, u = 1, v = 0;
@@ -87,6 +77,23 @@ public:
         u %= Modulus;
         if (u < 0) u += Modulus;
         return u;
+    }
+
+    constexpr ModInt pow(i64 k) const noexcept {
+        ModInt res = 1;
+        ModInt tmp;
+        if (k < 0) {
+            tmp = (*this).inv();
+            k = -k;
+        }
+        else {
+            tmp = *this;
+        }
+        for (; k > 0; k >>= 1) {
+            if (k & 1) res *= tmp;
+            tmp *= tmp;
+        }
+        return res;
     }
 
     friend constexpr ModInt operator+(const ModInt& lhs, const ModInt& rhs) noexcept {

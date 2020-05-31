@@ -34,14 +34,7 @@ public:
         return *this;
     }
     constexpr ModInt& operator/=(ModInt rhs) noexcept {
-        i64 exp = Modulus - 2;
-        while (exp) {
-            if (exp & 1) {
-                *this *= rhs;
-            }
-            rhs *= rhs;
-            exp >>= 1;
-        }
+        *this *= rhs.inv();
         return *this;
     }
 

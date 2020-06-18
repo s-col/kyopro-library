@@ -52,7 +52,7 @@ public:
             vec[_idx] = op(vec[_idx * 2], vec[_idx * 2 + 1]);
         }
     }
-    // 区間[_i, _r)に対するクエリを実行する
+    // Query [i, j)
     T query(size_t _l, size_t _r) const noexcept {
         T l_val = ID, r_val = ID;
         _l += sz, _r += sz - 1;

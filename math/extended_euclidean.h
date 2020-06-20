@@ -2,9 +2,9 @@
 
 // 拡張ユークリッド互除法
 // 一次不定方程式 ax + by = gcd(a, b) を解く
-template <typename _Ty>
-void extended_euclidean(_Ty& _x, _Ty& _y, const _Ty& a, const _Ty& b) {
-    _Ty x, y, u, v, s, t, k;
+template <typename T>
+void extended_euclidean(T& _x, T& _y, const T& a, const T& b) {
+    T x, y, u, v, s, t, k;
     s = a;
     t = b;
     x = 1;

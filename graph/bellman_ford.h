@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "template.h"
 
 // ベルマンフォード法
@@ -9,9 +10,9 @@
 //     dist: dist[i] = 頂点sから頂点iまでの最短距離(出力)
 //     closed: closed[i] = 頂点sから頂点iまで至るまでに負閉路があると true
 //     (出力) g : 重み付きグラフ(隣接リスト) s : スタートする頂点番号
-template <typename _Ty>
-bool bellman_ford(const WeightedGraph<_Ty>& g, std::vector<_Ty>& dist, int s) {
-    _Ty inf = std::numeric_limits<_Ty>::max();
+template <typename T>
+bool bellman_ford(const WeightedGraph<T>& g, std::vector<T>& dist, int s) {
+    T inf = std::numeric_limits<T>::max();
     int n = static_cast<int>(g.size());
     dist.assign(n, inf);
     dist[s] = 0;
@@ -47,9 +48,9 @@ bool bellman_ford(const WeightedGraph<_Ty>& g, std::vector<_Ty>& dist, int s) {
 //     closed: closed[i] = 頂点sから頂点iまで至るまでに負閉路があると true
 //     (出力) prev : 一つ前の頂点番号を格納する配列(出力) g :
 //     重み付きグラフ(隣接リスト) s : スタートする頂点番号]
-template <typename _Ty>
-bool bellman_ford(const WeightedGraph<_Ty>& g, std::vector<_Ty>& dist, std::vector<int>& prev, int s) {
-    _Ty inf = std::numeric_limits<_Ty>::max();
+template <typename T>
+bool bellman_ford(const WeightedGraph<T>& g, std::vector<T>& dist, std::vector<int>& prev, int s) {
+    T inf = std::numeric_limits<T>::max();
     int n = static_cast<int>(g.size());
     prev.assign(n, -1);
     dist.assign(n, inf);

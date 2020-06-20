@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "template.h"
 
 // ダイクストラ法
@@ -8,23 +9,23 @@
 //     dist: dist[i] = 頂点sから頂点iまでの最短距離(出力)
 //     g : 重み付きグラフ(隣接リスト)
 //     s : スタートする頂点番号
-template <typename _Ty>
-void dijkstra(std::vector<_Ty>& dist, const WeightedGraph<_Ty>& g, int s) {
-    constexpr _Ty inf = std::numeric_limits<_Ty>::max();
+template <typename T>
+void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
+    constexpr T inf = std::numeric_limits<T>::max();
     dist.assign(g.size(), inf);
 
-    using Pi = std::pair<_Ty, int>;
+    using Pi = std::pair<T, int>;
     std::priority_queue<Pi, std::vector<Pi>, std::greater<Pi>> q;
     dist[s] = 0;
     q.emplace(dist[s], s);
     while (!q.empty()) {
-        _Ty cost;
+        T cost;
         int idx;
         tie(cost, idx) = q.top();
         q.pop();
         if (dist[idx] < cost) continue;
         for (const auto& edge : g[idx]) {
-            _Ty next_cost = cost + edge.cost;
+            T next_cost = cost + edge.cost;
             if (next_cost >= dist[edge.to]) continue;
             dist[edge.to] = next_cost;
             q.emplace(next_cost, edge.to);
@@ -41,25 +42,25 @@ void dijkstra(std::vector<_Ty>& dist, const WeightedGraph<_Ty>& g, int s) {
 //     prev : 一つ前の頂点番号を格納する配列(出力)
 //     g : 重み付きグラフ(隣接リスト)
 //     s : スタートする頂点番号
-template <typename _Ty>
-void dijkstra(std::vector<_Ty>& dist, std::vector<int>& prev,
-              const WeightedGraph<_Ty>& g, int s) {
-    constexpr _Ty inf = std::numeric_limits<_Ty>::max();
+template <typename T>
+void dijkstra(std::vector<T>& dist, std::vector<int>& prev,
+              const WeightedGraph<T>& g, int s) {
+    constexpr T inf = std::numeric_limits<T>::max();
     dist.assign(g.size(), inf);
     prev.assign(g.size(), -1);
 
-    using Pi = std::pair<_Ty, int>;
+    using Pi = std::pair<T, int>;
     std::priority_queue<Pi, std::vector<Pi>, std::greater<Pi>> q;
     dist[s] = 0;
     q.emplace(dist[s], s);
     while (!q.empty()) {
-        _Ty cost;
+        T cost;
         int idx;
         tie(cost, idx) = q.top();
         q.pop();
         if (dist[idx] < cost) continue;
         for (const auto& edge : g[idx]) {
-            _Ty next_cost = cost + edge.cost;
+            T next_cost = cost + edge.cost;
             if (next_cost >= dist[edge.to]) continue;
             dist[edge.to] = next_cost;
             prev[edge.to] = idx;

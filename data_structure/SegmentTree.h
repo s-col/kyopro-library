@@ -57,8 +57,8 @@ public:
         T l_val = ID, r_val = ID;
         l += sz, r += sz - 1;
         for (; l <= r; l >>= 1, r >>= 1) {
-            if (l & 1) l_val = op(l_val, vec[_l++]);
-            if (!(r & 1)) r_val = op(r_val, vec[_r--]);
+            if (l & 1) l_val = op(l_val, vec[l++]);
+            if (!(r & 1)) r_val = op(r_val, vec[r--]);
         }
         return op(l_val, r_val);
     }

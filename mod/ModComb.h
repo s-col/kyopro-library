@@ -13,7 +13,7 @@ private:
     Vl fac, inv, finv;
 
 public:
-    ModComb(i64 n) : fac(n + 1), inv(n + 1), finv(n + 1) {
+    explicit ModComb(i64 n) noexcept : fac(n + 1), inv(n + 1), finv(n + 1) {
         fac[0] = fac[1] = 1;
         finv[0] = finv[1] = 1;
         inv[1] = 1;
@@ -24,7 +24,7 @@ public:
         }
     }
 
-    ModInt<Modulus> comb(i64 n, i64 k) {
+    ModInt<Modulus> comb(i64 n, i64 k) const noexcept {
         ModInt<Modulus> res;
         if (n < k)
             res = 0;
@@ -35,6 +35,6 @@ public:
         return res;
     }
 
-    ModInt<Modulus> get_fac(i64 n) { return ModInt<Modulus>(fac[n]); }
-    ModInt<Modulus> get_finv(i64 n) { return ModInt<Modulus>(finv[n]); }
+    ModInt<Modulus> get_fac(i64 n) const noexcept { return ModInt<Modulus>(fac[n]); }
+    ModInt<Modulus> get_finv(i64 n) const noexcept { return ModInt<Modulus>(finv[n]); }
 };

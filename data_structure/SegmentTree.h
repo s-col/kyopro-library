@@ -3,7 +3,7 @@
 // セグメント木 SegmentTree<T, Op>
 //     T: 配列の要素の型, Op: 二項演算関数の型
 // arguments:
-//     _n: 要素数, _op: 二項演算, _identity: 単位元
+//     n: 要素数, op: 二項演算, id: 単位元
 // 時間計算量：
 //     構築: O(N)
 //     クエリ, 更新: O(log N)
@@ -11,24 +11,24 @@ template <class T, class Op>
 class SegmentTree {
 private:
     const Op op;
-    const T ID;
+    const T id;
     std::vector<T> vec;
     int sz;
 
 public:
-    explicit SegmentTree(int _n, Op _op, T _identity) noexcept
-        : op(_op), ID(_identity) {
-        sz = 1;
-        while (sz < _n) sz <<= 1;
-        vec.assign(sz * 2, ID);
-    }
-    explicit SegmentTree(const std::vector<T>& _vec, Op _op, T _identity) noexcept
-        : op(_op), ID(_identity) {
-        int n = _vec.size();
+    explicit SegmentTree(int n, Op op, T id) noexcept
+        : op(op), id(id) {
         sz = 1;
         while (sz < n) sz <<= 1;
-        vec.assign(sz * 2, ID);
-        set_array(_vec);
+        vec.assign(sz * 2, id);
+    }
+    explicit SegmentTree(const std::vector<T>& vec, Op op, T id) noexcept
+        : op(op), id(id) {
+        int n = vec.size();
+        sz = 1;
+        while (sz < n) sz <<= 1;
+        this->vec.assign(sz * 2, id);
+        set_array(vec);
     }
     void set_value(int idx, T val) noexcept {
         vec[idx + sz] = val;
@@ -37,8 +37,8 @@ public:
     void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
     }
-    void set_array(const std::vector<T>& _vec) noexcept {
-        set_array(_vec.begin(), _vec.end());
+    void set_array(const std::vector<T>& vec) noexcept {
+        set_array(vec.begin(), vec.end());
     }
     void build() noexcept {
         for (int i = sz - 1; i > 0; i--) {
@@ -54,7 +54,7 @@ public:
     }
     // Query [l, r)
     T query(int l, int r) const noexcept {
-        T l_val = ID, r_val = ID;
+        T l_val = id, r_val = id;
         l += sz, r += sz - 1;
         for (; l <= r; l >>= 1, r >>= 1) {
             if (l & 1) l_val = op(l_val, vec[l++]);
@@ -64,5 +64,8 @@ public:
     }
     const T& operator[](int idx) const noexcept {
         return vec[idx + sz];
+    }
+    void reset() noexcept {
+        std::fill(vec.begin(), vec.end(), id);
     }
 };

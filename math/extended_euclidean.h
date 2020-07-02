@@ -3,7 +3,7 @@
 // 拡張ユークリッド互除法
 // 一次不定方程式 ax + by = gcd(a, b) を解く
 template <typename T>
-void extended_euclidean(T& _x, T& _y, const T& a, const T& b) {
+void extended_euclidean(T& x, T& y, const T& a, const T& b) {
     T x, y, u, v, s, t, k;
     s = a;
     t = b;
@@ -20,6 +20,4 @@ void extended_euclidean(T& _x, T& _y, const T& a, const T& b) {
         y -= k * v;
         swap(y, v);
     }
-    _x = x;
-    _y = y;
 }

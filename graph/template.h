@@ -6,10 +6,10 @@ struct Edge {
     int src, to;
     T cost;
 
-    constexpr Edge(int _to, T _cost) noexcept
-        : src(-1), to(_to), cost(_cost) {}
-    constexpr Edge(int _src, int _to, T _cost) noexcept
-        : src(_src), to(_to), cost(_cost) {}
+    constexpr Edge(int to, T cost) noexcept
+        : src(-1), to(to), cost(cost) {}
+    constexpr Edge(int src, int to, T cost) noexcept
+        : src(src), to(to), cost(cost) {}
 };
 template <typename T>
 using WeightedGraph = std::vector<std::vector<Edge<T>>>;

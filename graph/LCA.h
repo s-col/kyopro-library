@@ -11,11 +11,39 @@ class LCA {
     using Adj = std::vector<std::vector<int>>;  // 隣接リスト
 
 private:
-    int m_num;                               // 要素数
-    int m_lognum;                            // floor(log2(m_num)) + 1
-    int m_root;                              // 根
-    std::vector<std::vector<int>> m_parent;  // m_parent[k][i]: i番目のノードの2^k番目の親
-    std::vector<int> m_depth;                // 深さ
+    int n;                              // 要素数
+    int logn;                           // floor(log2(n)) + 1
+    int root;                           // 根
+    std::vector<std::vector<int>> par;  // par[k][i]: i番目のノードの2^k番目の親
+    std::vector<int> dep;               // 深さ
+
+    void init(const Adj& g, int root) {
+        n = static_cast<int>(g.size());
+        root = root;
+
+        logn = 1;
+        while (n >> logn) ++logn;
+
+        par.assign(logn, std::vector<int>(n, -1));
+        dep.assign(n, -1);
+        dfs(g, root, -1, 0);
+
+        // parを初期化する
+        for (int k = 0; k + 1 < logn; k++) {
+            for (int i = 0; i < n; i++) {
+                if (par[k][i] != -1)
+                    par[k + 1][i] = par[k][par[k][i]];
+            }
+        }
+    }
+    // 初期化時にpar[0]やdepを求めるためのDFS
+    void dfs(const Adj& g, int v, int p, int d) {
+        par[0][v] = p;
+        dep[v] = d;
+        for (const auto& to : g[v]) {
+            if (to != p) dfs(g, to, v, d + 1);
+        }
+    }
 
 public:
     /**
@@ -24,59 +52,28 @@ public:
     LCA(const Adj& g, int root) {
         init(g, root);
     }
-
-    void init(const Adj& g, int root) {
-        m_num = static_cast<int>(g.size());
-        m_root = root;
-
-        m_lognum = 1;
-        while (m_num >> m_lognum) ++m_lognum;
-
-        m_parent.assign(m_lognum, std::vector<int>(m_num, -1));
-        m_depth.assign(m_num, -1);
-        dfs(g, m_root, -1, 0);
-
-        // m_parentを初期化する
-        for (int k = 0; k + 1 < m_lognum; k++) {
-            for (int i = 0; i < m_num; i++) {
-                if (m_parent[k][i] != -1)
-                    m_parent[k + 1][i] = m_parent[k][m_parent[k][i]];
-            }
-        }
-    }
-
-    // 初期化時にm_parent[0]やm_depthを求めるためのDFS
-    void dfs(const Adj& g, int v, int p, int d) {
-        m_parent[0][v] = p;
-        m_depth[v] = d;
-        for (const auto& to : g[v]) {
-            if (to != p) dfs(g, to, v, d + 1);
-        }
-    }
-
     // u と v のLCAを返す
-    int lca(int u, int v) {
-        if (m_depth[u] > m_depth[v]) std::swap(u, v);
+    int lca(int u, int v) const {
+        if (dep[u] > dep[v]) std::swap(u, v);
 
         // u と v の深さが同じになるまで親をたどる
-        for (int k = 0; k < m_lognum; k++) {
-            if ((m_depth[v] - m_depth[u]) >> k & 1) {
-                v = m_parent[k][v];
+        for (int k = 0; k < logn; k++) {
+            if ((dep[v] - dep[u]) >> k & 1) {
+                v = par[k][v];
             }
         }
 
         if (u == v) return u;
 
         // 二分探索する
-        for (int k = m_lognum - 1; k >= 0; k--) {
-            if (m_parent[k][u] != m_parent[k][v]) {
-                u = m_parent[k][u];
-                v = m_parent[k][v];
+        for (int k = logn - 1; k >= 0; k--) {
+            if (par[k][u] != par[k][v]) {
+                u = par[k][u];
+                v = par[k][v];
             }
         }
 
-        return m_parent[0][u];
+        return par[0][u];
     }
-
-    int parent(int idx, int d) { return m_parent[d][idx]; }
+    int parent(int idx, int d) const { return par[d][idx]; }
 };

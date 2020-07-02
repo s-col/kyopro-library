@@ -3,7 +3,7 @@
 // 遅延セグメント木(遅延)
 //     T: 配列の要素の型
 // arguments:
-//     _n: 要素数
+//     n: 要素数
 // 時間計算量：
 //     構築: O(N)
 //     クエリ, 更新: O(log N)
@@ -16,9 +16,9 @@ private:
     int sz;
 
 public:
-    explicit LazySegmentTree(int _n) noexcept {
+    explicit LazySegmentTree(int n) noexcept {
         sz = 1;
-        while (sz < _n) sz <<= 1;
+        while (sz < n) sz <<= 1;
         vec.assign(sz * 2 - 1, 0);
         lazy.assign(sz * 2 - 1, 0);
     }

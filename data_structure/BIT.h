@@ -7,33 +7,33 @@
 template <typename T>
 class BIT {
 private:
-    size_t m_n;
-    std::vector<T> m_vec;
+    int n;
+    std::vector<T> vec;
 
 public:
-    BIT(size_t num) : m_n(num), m_vec(num + 1) {}
+    BIT(int n) : n(n), vec(n + 1) {}
     // i 番目の要素に a を足す
-    void add(size_t i, const T& a) {
-        for (++i; i <= m_n; i += i & (-i)) {
-            m_vec[i] += a;
+    void add(int i, const T& a) {
+        for (++i; i <= n; i += i & (-i)) {
+            vec[i] += a;
         }
     }
     // 区間[0, i)に対するクエリを実行する
-    T query(size_t i) const {
+    T query(int i) const {
         T res = 0;
         for (; i >= 1; i -= i & (-i)) {
-            res += m_vec[i];
+            res += vec[i];
         }
         return res;
     }
     // 区間[i, j)に対するクエリを実行する
-    T query(size_t i, size_t j) const {
+    T query(int i, int j) const {
         return query(j) - query(i);
     }
     size_t size() const noexcept {
-        return m_n;
+        return n;
     }
-    void assign(const T& a) {
-        std::fill(m_vec.begin(), m_vec.end(), a);
+    void reset() noexcept {
+        std::fill(vec.begin(), vec.end(), static_cast<T>(0));
     }
 };

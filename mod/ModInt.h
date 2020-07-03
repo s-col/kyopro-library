@@ -13,7 +13,7 @@ public:
         if (m_value < 0) m_value += Modulus;
     }
 
-    constexpr const i64& value() const noexcept { return m_value; }
+    constexpr i64 const& value() const noexcept { return m_value; }
 
     constexpr ModInt& operator+=(const ModInt rhs) noexcept {
         m_value += rhs.m_value;

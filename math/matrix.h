@@ -17,10 +17,10 @@ public:
     }
 
     const T& operator()(int i, int j) const noexcept {
-        return mat[i + j * H];
+        return mat[i * W + j];
     }
     T& operator()(int i, int j) noexcept {
-        return mat[i + j * H];
+        return mat[i * W + j];
     }
 
     Matrix& operator+=(const Matrix& r) noexcept {
@@ -46,9 +46,11 @@ public:
         Matrix res(l.H, r.W);
         const int C = std::max(l.W, r.H);
         for (int i = 0; i < l.H; i++) {
-            auto t = l.mat[std::slice(i, C, l.H)];
-            for (int j = 0; j < r.W; j++) {
-                res(i, j) = (t * r.mat[std::slice(j * r.H, C, 1)]).sum();
+            for (int k = 0; k < C; k++) {
+                const double t = l(i, k);
+                for (int j = 0; j < r.W; j++) {
+                    res(i, j) += t * r(k, j);
+                }
             }
         }
         return res;

@@ -4,7 +4,7 @@
 // 一次不定方程式 ax + by = gcd(a, b) を解く
 template <typename T>
 void extended_euclidean(T& x, T& y, const T& a, const T& b) {
-    T x, y, u, v, s, t, k;
+    T u, v, s, t, k;
     s = a;
     t = b;
     x = 1;

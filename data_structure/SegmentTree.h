@@ -4,6 +4,7 @@
 //     T: 配列の要素の型, Op: 二項演算関数の型
 // arguments:
 //     n: 要素数, op: 二項演算, id: 単位元
+// query は右半開区間
 // 時間計算量：
 //     構築: O(N)
 //     クエリ, 更新: O(log N)
@@ -30,6 +31,9 @@ public:
         this->vec.assign(sz * 2, id);
         set_array(vec);
     }
+    T& operator[](int idx) noexcept {
+        return vec[idx + sz];
+    }
     void set_value(int idx, T val) noexcept {
         vec[idx + sz] = val;
     }
@@ -52,7 +56,6 @@ public:
             vec[idx] = op(vec[idx * 2], vec[idx * 2 + 1]);
         }
     }
-    // Query [l, r)
     T query(int l, int r) const noexcept {
         T l_val = id, r_val = id;
         l += sz, r += sz - 1;
@@ -61,9 +64,6 @@ public:
             if (!(r & 1)) r_val = op(r_val, vec[r--]);
         }
         return op(l_val, r_val);
-    }
-    const T& operator[](int idx) const noexcept {
-        return vec[idx + sz];
     }
     void reset() noexcept {
         std::fill(vec.begin(), vec.end(), id);

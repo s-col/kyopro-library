@@ -1,23 +1,21 @@
 #include <bits/stdc++.h>
 
 class UnionFind {
-    using i64 = std::int64_t;
-
 private:
-    std::vector<i64> par;
-    std::vector<i64> sz;
+    std::vector<int> par;
+    std::vector<int> sz;
 
 public:
-    UnionFind(i64 N) : par(N), sz(N, 1) {
-        for (i64 i = 0; i < N; ++i) par[i] = i;
+    UnionFind(int N) : par(N), sz(N, 1) {
+        for (int i = 0; i < N; ++i) par[i] = i;
     }
-    i64 root(i64 x) {
+    int root(int x) {
         return par[x] == x ? x : par[x] = root(par[x]);
     }
-    bool same(i64 x, i64 y) {
+    bool same(int x, int y) {
         return root(x) == root(y);
     }
-    void unite(i64 x, i64 y) {
+    void unite(int x, int y) {
         x = root(x);
         y = root(y);
         if (x == y) return;
@@ -25,12 +23,12 @@ public:
         par[y] = x;
         sz[x] += sz[y];
     }
-    i64 size(i64 x) {
+    int size(int x) {
         return sz[root(x)];
     }
-    void reset(i64 N) {
+    void reset(int N) {
         par.resize(N);
-        for (i64 i = 0; i < N; ++i) par[i] = i;
+        for (int i = 0; i < N; ++i) par[i] = i;
         sz.assign(N, 1);
     }
 };

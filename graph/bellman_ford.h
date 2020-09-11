@@ -7,11 +7,13 @@
 // 負の距離が存在してもok
 // 時間計算量：O(VE)
 // arguments:
-//     dist: dist[i] = 頂点sから頂点iまでの最短距離(出力)
-//     closed: closed[i] = 頂点sから頂点iまで至るまでに負閉路があると true
-//     (出力) g : 重み付きグラフ(隣接リスト) s : スタートする頂点番号
+//     (O) dist: dist[i] = s から i までの距離
+//     (I) g: 重み付きグラフ
+//     (I) s: 始点
+// return:
+//     負閉路が無ければ true
 template <typename T>
-bool bellman_ford(const WeightedGraph<T>& g, std::vector<T>& dist, int s) {
+bool bellman_ford(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     T inf = std::numeric_limits<T>::max();
     int n = static_cast<int>(g.size());
     dist.assign(n, inf);
@@ -44,12 +46,14 @@ bool bellman_ford(const WeightedGraph<T>& g, std::vector<T>& dist, int s) {
 // 閉路の検出にも使える
 // 時間計算量：O(VE)
 // arguments:
-//     dist: dist[i] = 頂点sから頂点iまでの最短距離(出力)
-//     closed: closed[i] = 頂点sから頂点iまで至るまでに負閉路があると true
-//     (出力) prev : 一つ前の頂点番号を格納する配列(出力) g :
-//     重み付きグラフ(隣接リスト) s : スタートする頂点番号]
+//     (O) dist: dist[i] = s から i までの距離
+//     (O) prev: prev[i] = i のひとつ前の頂点番号
+//     (I) g: 重み付きグラフ
+//     (I) s: 始点
+// return:
+//     負閉路が無ければ true
 template <typename T>
-bool bellman_ford(const WeightedGraph<T>& g, std::vector<T>& dist, std::vector<int>& prev, int s) {
+bool bellman_ford(std::vector<T>& dist, std::vector<int>& prev, const WeightedGraph<T>& g, int s) {
     T inf = std::numeric_limits<T>::max();
     int n = static_cast<int>(g.size());
     prev.assign(n, -1);

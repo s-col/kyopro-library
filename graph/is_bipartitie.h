@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #include "template.h"
 
 // グラフが二部グラフかを判定
@@ -10,13 +11,11 @@ int is_bipartite(const Graph& g) {
     const int n = static_cast<int>(g.size());
     std::vector<int> colors(n);
     int white_cnt = 0;
-    std::stack<std::pair<int, int>> stk;
-    stk.emplace(0, 1);
-    while (!stk.empty()) {
-        int v;
-        int color;
-        std::tie(v, color) = stk.top();
-        stk.pop();
+    std::stack<std::pair<int, int>> st;
+    st.emplace(0, 1);
+    while (!st.empty()) {
+        auto [v, color] = st.top();
+        st.pop();
         if (color == 1) ++white_cnt;
         colors[v] = color;
         for (const auto& to : g[v]) {
@@ -24,7 +23,7 @@ int is_bipartite(const Graph& g) {
                 return -1;
             }
             if (colors[to] == 0) {
-                stk.emplace(to, -color);
+                st.emplace(to, -color);
             }
         }
     }

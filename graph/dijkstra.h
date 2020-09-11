@@ -5,10 +5,10 @@
 // ダイクストラ法
 // 頂点sから各頂点への最短距離を求める
 // 時間計算量 : O((E + V)log(V))
-// argument:
-//     dist: dist[i] = 頂点sから頂点iまでの最短距離(出力)
-//     g : 重み付きグラフ(隣接リスト)
-//     s : スタートする頂点番号
+// arguments:
+//     (O) dist: dist[i] = s から i までの距離
+//     (I) g: 重み付きグラフ
+//     (I) s: 始点
 template <typename T>
 void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     constexpr T inf = std::numeric_limits<T>::max();
@@ -19,9 +19,7 @@ void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     dist[s] = 0;
     q.emplace(dist[s], s);
     while (!q.empty()) {
-        T cost;
-        int idx;
-        tie(cost, idx) = q.top();
+        auto [cost, idx] = q.top();
         q.pop();
         if (dist[idx] < cost) continue;
         for (const auto& edge : g[idx]) {
@@ -37,11 +35,11 @@ void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
 // 頂点sから各頂点への最短距離を求める
 // prevも返すので経路を求めることができる
 // 時間計算量 : O((E + V)log(V))
-// argument:
-//     dist : 頂点sから頂点iまでの最短距離を格納する配列(出力)
-//     prev : 一つ前の頂点番号を格納する配列(出力)
-//     g : 重み付きグラフ(隣接リスト)
-//     s : スタートする頂点番号
+// arguments:
+//     (O) dist: dist[i] = s から i までの距離
+//     (O) prev: prev[i] = i のひとつ前の頂点番号
+//     (I) g: 重み付きグラフ
+//     (I) s: 始点
 template <typename T>
 void dijkstra(std::vector<T>& dist, std::vector<int>& prev,
               const WeightedGraph<T>& g, int s) {
@@ -54,9 +52,7 @@ void dijkstra(std::vector<T>& dist, std::vector<int>& prev,
     dist[s] = 0;
     q.emplace(dist[s], s);
     while (!q.empty()) {
-        T cost;
-        int idx;
-        tie(cost, idx) = q.top();
+        auto [cost, idx] = q.top();
         q.pop();
         if (dist[idx] < cost) continue;
         for (const auto& edge : g[idx]) {

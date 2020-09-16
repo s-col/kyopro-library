@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-#include "template.h"
-
 // LCA
 // LCAを求める
 // 時間計算量：

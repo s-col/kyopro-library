@@ -52,8 +52,8 @@ public:
     const Vec& get_src() const noexcept { return src; }
     const int& operator[](int i) const noexcept { return sa[i]; }
     size_t size() const noexcept { return sa.size(); };
-    std::vector<int>::const_iterator cbegin() const noexcept { return sa.cbegin(); }
-    std::vector<int>::const_iterator cend() const noexcept { return sa.cend(); }
+    std::vector<int>::const_iterator begin() const noexcept { return sa.cbegin(); }
+    std::vector<int>::const_iterator end() const noexcept { return sa.cend(); }
 
 private:
     int le_comp(const Vec& a, int sh) const noexcept {
@@ -198,6 +198,6 @@ public:
     const SuffixArray<Vec>& get_sa() const noexcept { return sa; }
     const int& operator[](int i) const noexcept { return lcp[i]; }
     size_t size() const noexcept { return lcp.size(); }
-    std::vector<int>::const_iterator begin() { return lcp.cbegin(); };
-    std::vector<int>::const_iterator end() { return lcp.cend(); }
+    std::vector<int>::const_iterator begin() const noexcept { return lcp.cbegin(); };
+    std::vector<int>::const_iterator end() const noexcept { return lcp.cend(); }
 };

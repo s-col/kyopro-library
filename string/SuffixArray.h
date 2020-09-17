@@ -165,17 +165,17 @@ private:
 //　構築： O(|S|)
 template <typename Vec>
 class LCPArray {
-    using value_type = typename Vec::value_type;
+    using vec_val_t = typename Vec::value_type;
 
 private:
     SuffixArray<Vec> sa;
     const Vec& src;
-    const value_type base;
+    const vec_val_t base;
     const int char_num;
     std::vector<int> lcp;
 
 public:
-    LCPArray(const Vec& src, value_type base, int char_num) noexcept
+    LCPArray(const Vec& src, vec_val_t base, int char_num) noexcept
         : sa(src, base, char_num), src(sa.get_src()), base(base), char_num(char_num) {}
     void build() noexcept {
         sa.build();

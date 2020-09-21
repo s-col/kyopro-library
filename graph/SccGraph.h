@@ -18,13 +18,13 @@ public:
         std::vector<int> vs;
         vs.reserve(n);
         std::vector<bool> used(n);
-        auto dfs1 = [&](auto&& self, int idx) -> void {
+        auto dfs1 = [&](auto&& self, int idx) noexcept -> void {
             used[idx] = true;
             for (const auto& v : g[idx])
                 if (!used[v]) self(self, v);
             vs.emplace_back(idx);
         };
-        auto dfs2 = [&](auto&& self, int idx) -> void {
+        auto dfs2 = [&](auto&& self, int idx) noexcept -> void {
             used[idx] = true;
             res.back().emplace_back(idx);
             for (const auto& v : rg[idx])

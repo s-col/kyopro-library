@@ -71,36 +71,40 @@ public:
                     const _Edge& e = g[v][i];
                     if (e.cap > 0 && level[e.to] < 0) {
                         level[e.to] = level[v] + 1;
+                        if (e.to == t) return;
                         que.emplace_back(e.to);
                     }
                 }
             }
         };
         auto dfs = [&](auto&& self, int v, Cap f) noexcept -> Cap {
-            if (v == t) return f;
+            if (v == s) return f;
             const int sz = static_cast<int>(g[v].size());
             const int level_v = level[v];
             Cap res = 0;
             for (int& i = iter[v]; i < sz; i++) {
                 _Edge& e = g[v][i];
-                if (e.cap > 0 && level_v < level[e.to]) {
-                    int d = self(self, e.to, std::min(f - res, e.cap));
+                _Edge& re = g[e.to][e.rev];
+                if (level_v > level[e.to] && re.cap > 0) {
+                    int d = self(self, e.to, std::min(f - res, re.cap));
                     if (d > 0) {
-                        e.cap -= d;
-                        g[e.to][e.rev].cap += d;
-                        return d;
+                        re.cap -= d;
+                        e.cap += d;
+                        res += d;
+                        if (res == f) break;
                     }
                 }
             }
-            return 0;
+            return res;
         };
         Cap flow = 0;
         while (flow < flow_limit) {
             bfs();
             if (level[t] < 0) return flow;
             iter.assign(n, 0);
-            Cap f;
-            while ((f = dfs(dfs, s, flow_limit - flow)) > 0) {
+            while (flow < flow_limit) {
+                Cap f = dfs(dfs, t, flow_limit - flow);
+                if (f == 0) break;
                 flow += f;
             }
         }

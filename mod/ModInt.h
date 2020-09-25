@@ -133,3 +133,6 @@ public:
         return os;
     }
 };
+
+constexpr long long MOD = 1000000009;
+using Mint = ModInt<MOD>;

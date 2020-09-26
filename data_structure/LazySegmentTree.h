@@ -49,6 +49,14 @@ public:
             vec[i] = f(vec[i * 2 + 1], vec[i * 2 + 2]);
         }
     }
+    void update(int a, int b, E x) noexcept {
+        _update(a, b, x, 0, 0, sz);
+    }
+    T query(int a, int b) noexcept {
+        return _query(a, b, 0, 0, sz);
+    }
+
+private:
     void eval(int k, int l, int r) noexcept {
         if (lazy[k] == eid) return;
         if (r - l > 1) {
@@ -58,14 +66,6 @@ public:
         vec[k] = g(vec[k], p(lazy[k], r - l));
         lazy[k] = eid;
     }
-    void update(int a, int b, E x) noexcept {
-        _update(a, b, x, 0, 0, sz);
-    }
-    T query(int a, int b) noexcept {
-        return _query(a, b, 0, 0, sz);
-    }
-
-private:
     T _update(int a, int b, E x, int k, int l, int r) noexcept {
         eval(k, l, r);
         if (b <= l || r <= a) return vec[k];

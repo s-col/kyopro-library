@@ -2,7 +2,7 @@
 
 // DynamicModInt
 // NOTE: Modulus の参照先は静的領域に無ければならない
-template <std::int_fast64_t& Modulus>
+template <const std::int_fast64_t& Modulus>
 class DynamicModInt {
     using i64 = std::int_fast64_t;
 

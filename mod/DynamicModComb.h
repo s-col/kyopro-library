@@ -5,7 +5,7 @@
 // 二項係数(mod)
 // require: DynamicModInt
 // NOTE: Modulus は素数でなければならない
-template <std::int_fast64_t& Modulus>
+template <const std::int_fast64_t& Modulus>
 class DynamicModComb {
     using i64 = int_fast64_t;
     using Vm = std::vector<DynamicModInt<Modulus>>;

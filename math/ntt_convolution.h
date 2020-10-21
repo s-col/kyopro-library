@@ -28,13 +28,13 @@ std::vector<ModInt<Modulus>> ntt_convolution(const std::vector<T>& a, const std:
     for (int i = 0; i < nb; i++) cb[i] = b[i];
     auto dft = [g = gu, d = deg](std::vector<mint_t>& vec, bool inverse = false) noexcept -> void {
         mint_t gbase = (inverse ? g.inv() : g);
+        mint_t gbase_k, w1, w2;
         for (int i = 0; i < d; i++) {
             const int pdeg = 1 << (d - i - 1);
             for (int j = 0; j < (1 << i); j++) {
-                mint_t gbase_k = 1;
+                gbase_k = 1;
                 for (int k = 0; k < pdeg; k++) {
                     int cur = k + j * (pdeg << 1);
-                    mint_t w1, w2;
                     w1 = vec[cur] + vec[cur + pdeg];
                     w2 = vec[cur] - vec[cur + pdeg];
                     vec[cur] = w1;
@@ -60,7 +60,7 @@ std::vector<ModInt<Modulus>> ntt_convolution(const std::vector<T>& a, const std:
     dft(ca), dft(cb);
     for (int i = 0; i < sz; i++) ca[i] *= cb[i];
     dft(ca, true);
-    std::vector<mint_t> res(sz);
-    for (int i = 0; i < sz; i++) res[i] = ca[i] / sz;
-    return res;
+    const mint_t sz_inv = mint_t(sz).inv();
+    for (int i = 0; i < sz; i++) ca[i] *= sz_inv;
+    return ca;
 }

@@ -30,7 +30,8 @@ public:
         return *this;
     }
     constexpr ModInt& operator*=(const ModInt rhs) noexcept {
-        m_value = m_value * rhs.m_value % Modulus;
+        m_value *= rhs.m_value;
+        if (m_value >= Modulus) m_value %= Modulus;
         return *this;
     }
     constexpr ModInt& operator/=(ModInt rhs) noexcept {
@@ -60,12 +61,13 @@ public:
     constexpr ModInt inv() const noexcept {
         i64 q = m_value;
         i64 b = Modulus, u = 1, v = 0;
+        i64 tmp = 0;
         while (b) {
             i64 t = q / b;
             q -= t * b;
-            std::swap(q, b);
+            tmp = q, q = b, b = tmp;
             u -= t * v;
-            std::swap(u, v);
+            tmp = u, u = v, v = tmp;
         }
         u %= Modulus;
         if (u < 0) u += Modulus;
@@ -74,9 +76,9 @@ public:
 
     constexpr ModInt pow(i64 k) const noexcept {
         ModInt res = 1;
-        ModInt tmp;
+        ModInt tmp = 0;
         if (k < 0) {
-            tmp = (*this).inv();
+            tmp = this->inv();
             k = -k;
         }
         else {

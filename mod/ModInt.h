@@ -9,7 +9,8 @@ private:
     i64 m_value;
 
 public:
-    constexpr ModInt(const i64 x = 0) noexcept : m_value(x % Modulus) {
+    constexpr ModInt(const i64 x = 0) noexcept : m_value(x) {
+        if (m_value < -Modulus || m_value >= Modulus) m_value %= Modulus;
         if (m_value < 0) m_value += Modulus;
     }
 
@@ -69,7 +70,7 @@ public:
             u -= t * v;
             tmp = u, u = v, v = tmp;
         }
-        u %= Modulus;
+        if (u < -Modulus || u >= Modulus) u %= Modulus;
         if (u < 0) u += Modulus;
         return u;
     }

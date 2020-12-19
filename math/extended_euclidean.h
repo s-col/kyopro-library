@@ -4,20 +4,14 @@
 // 一次不定方程式 ax + by = gcd(a, b) を解く
 template <typename T>
 void extended_euclidean(T& x, T& y, const T& a, const T& b) {
-    T u, v, s, t, k;
-    s = a;
-    t = b;
-    x = 1;
-    y = 0;
-    u = 0;
-    v = 1;
+    T u, v, s, t, k, tmp;
+    s = a, t = b, x = 1, y = 0, u = 0, v = 1;
     while (t) {
-        k = s / t;
-        s -= k * t;
-        swap(s, t);
+        k = s / t, s -= k * t;
+        tmp = s, s = t, t = tmp;
         x -= k * u;
-        swap(x, u);
+        tmp = x, x = u, u = tmp;
         y -= k * v;
-        swap(y, v);
+        tmp = y, y = v, v = tmp;
     }
 }

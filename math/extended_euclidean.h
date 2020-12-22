@@ -4,8 +4,8 @@
 // 一次不定方程式 ax + by = gcd(a, b) を解く
 template <typename T>
 constexpr std::pair<T, T> extended_euclidean(const T& a, const T& b) {
-    T x, y, u, v, s, t, k, tmp;
-    s = a, t = b, x = 1, y = 0, u = 0, v = 1;
+    T x = 1, y = 0, u = 0, v = 1, s = a, t = b;
+    T k = 0, tmp = 0;
     while (t) {
         k = s / t, s -= k * t;
         tmp = s, s = t, t = tmp;

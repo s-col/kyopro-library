@@ -3,8 +3,8 @@
 // 拡張ユークリッド互除法
 // 一次不定方程式 ax + by = gcd(a, b) を解く
 template <typename T>
-void extended_euclidean(T& x, T& y, const T& a, const T& b) {
-    T u, v, s, t, k, tmp;
+constexpr std::pair<T, T> extended_euclidean(const T& a, const T& b) {
+    T x, y, u, v, s, t, k, tmp;
     s = a, t = b, x = 1, y = 0, u = 0, v = 1;
     while (t) {
         k = s / t, s -= k * t;
@@ -14,4 +14,5 @@ void extended_euclidean(T& x, T& y, const T& a, const T& b) {
         y -= k * v;
         tmp = y, y = v, v = tmp;
     }
+    return {x, y};
 }

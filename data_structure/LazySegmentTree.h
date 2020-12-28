@@ -35,33 +35,36 @@ public:
         : f(f), g(g), h(h), p(p), tid(tid), eid(eid) {
         sz = 1;
         while (sz < n) sz <<= 1;
-        vec.assign(sz * 2 - 1, tid);
-        lazy.assign(sz * 2 - 1, eid);
+        vec.assign(sz * 2, tid);
+        lazy.assign(sz * 2, eid);
     }
     T& operator[](int idx) noexcept {
-        return vec[sz - 1 + idx];
+        return vec[sz + idx];
     }
     void set_value(int idx, T val) noexcept {
-        vec[sz - 1 + idx] = val;
+        vec[sz + idx] = val;
     }
     void build() noexcept {
-        for (int i = sz - 2; i >= 0; i--) {
-            vec[i] = f(vec[i * 2 + 1], vec[i * 2 + 2]);
+        for (int i = sz - 1; i > 0; i--) {
+            vec[i] = f(vec[i << 1], vec[(i << 1) | 1]);
         }
     }
     void update(int a, int b, E x) noexcept {
-        _update(a, b, x, 0, 0, sz);
+        _update(a, b, x, 1, 0, sz);
     }
     T query(int a, int b) noexcept {
-        return _query(a, b, 0, 0, sz);
+        return _query(a, b, 1, 0, sz);
+    }
+    T query_all() noexcept {
+        return query(0, sz);
     }
 
 private:
     void eval(int k, int l, int r) noexcept {
         if (lazy[k] == eid) return;
         if (r - l > 1) {
-            lazy[k * 2 + 1] = h(lazy[k * 2 + 1], lazy[k]);
-            lazy[k * 2 + 2] = h(lazy[k * 2 + 2], lazy[k]);
+            lazy[k << 1] = h(lazy[k << 1], lazy[k]);
+            lazy[(k << 1) | 1] = h(lazy[(k << 1) | 1], lazy[k]);
         }
         vec[k] = g(vec[k], p(lazy[k], r - l));
         lazy[k] = eid;
@@ -74,8 +77,8 @@ private:
             return g(vec[k], p(lazy[k], r - l));
         }
         else {
-            T t1 = _update(a, b, x, k * 2 + 1, l, (l + r) >> 1);
-            T t2 = _update(a, b, x, k * 2 + 2, (l + r) >> 1, r);
+            T t1 = _update(a, b, x, k << 1, l, (l + r) >> 1);
+            T t2 = _update(a, b, x, (k << 1) | 1, (l + r) >> 1, r);
             return vec[k] = f(t1, t2);
         }
     }
@@ -86,8 +89,8 @@ private:
             return vec[k];
         }
         else {
-            T t1 = _query(a, b, k * 2 + 1, l, (l + r) >> 1);
-            T t2 = _query(a, b, k * 2 + 2, (l + r) >> 1, r);
+            T t1 = _query(a, b, k << 1, l, (l + r) >> 1);
+            T t2 = _query(a, b, (k << 1) | 1, (l + r) >> 1, r);
             return f(t1, t2);
         }
     }

@@ -25,7 +25,7 @@ public:
         vec.assign(sz << 1, id);
     }
     explicit SegmentTree(const std::vector<T>& vec, Op op, T id) noexcept
-        : op(op), id(id) {
+        : n(vec.size()), op(op), id(id) {
         int n = vec.size();
         sz = 1;
         while (sz < n) sz <<= 1;
@@ -42,8 +42,9 @@ public:
     void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
     }
-    void set_array(const std::vector<T>& vec) noexcept {
-        set_array(vec.begin(), vec.end());
+    template <class Vec>
+    void set_array(const Vec& v) noexcept {
+        set_array(std::begin(v), std::end(v));
     }
     void build() noexcept {
         for (int i = sz - 1; i > 0; i--) {
@@ -74,7 +75,14 @@ public:
     template <class F>
     int max_right(int idx, const F& check) const noexcept {
         T acc = id;
-        return _max_right(idx, check, acc, 1, 0, sz);
+        return idx < n ? _max_right(idx, check, acc, 1, 0, sz) : n;
+    }
+    // Return the smallest x such that check(A[x] op ... op A[idx - 1]) == true
+    // complexity: O(log (n))
+    template <class F>
+    int min_left(int idx, const F& check) const noexcept {
+        T acc = id;
+        return idx > 0 ? _min_left(idx, check, acc, 1, 0, sz) : 0;
     }
     void reset() noexcept {
         std::fill(vec.begin(), vec.end(), id);
@@ -88,8 +96,7 @@ private:
             return check(acc) ? n : k - sz;
         }
         const int mid = (l + r) >> 1;
-        if (mid <= idx)
-            return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
+        if (mid <= idx) return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
         if (idx <= l) {
             T tmp = op(acc, vec[k]);
             if (check(tmp)) {
@@ -98,9 +105,26 @@ private:
             }
         }
         int vl = _max_right(idx, check, acc, k << 1, l, mid);
-        if (vl < n) {
-            return vl;
-        }
+        if (vl < n) return vl;
         return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
+    }
+    template <class F>
+    int _min_left(int idx, const F& check, T& acc, int k, int l, int r) const noexcept {
+        if (l + 1 == r) {
+            acc = op(acc, vec[k]);
+            return check(acc) ? 0 : k - sz + 1;
+        }
+        const int mid = (l + r) >> 1;
+        if (mid >= idx) return _min_left(idx, check, acc, k << 1, l, mid);
+        if (idx >= r) {
+            T tmp = op(acc, vec[k]);
+            if (check(tmp)) {
+                acc = tmp;
+                return 0;
+            }
+        }
+        int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
+        if (vr > 0) return vr;
+        return _min_left(idx, check, acc, k << 1, l, mid);
     }
 };

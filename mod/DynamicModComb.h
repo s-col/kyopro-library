@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "DynamicModInt.h"
+#include "kyopro-library/mod/DynamicModInt.h"
 
 // 二項係数(mod)
 // require: DynamicModInt

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "ModInt.h"
+#include "kyopro-library/mod/ModInt.h"
 
 // 二項係数(mod)
 // 要ModInt

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "SccGraph.h"
+#include "kyopro-library/graph/SccGraph.h"
 
 // 2-SAT
 // NOTE: SccGraph required.

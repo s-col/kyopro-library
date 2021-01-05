@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "library/mod/ModInt.h"
+#include "kyopro-library/mod/ModInt.h"
 
 // NTT による畳み込み (非再帰 ver.)
 // 計算量：O(N log N) (N = |a| + |b|)

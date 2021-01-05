@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "template.h"
+#include "kyopro-library/graph/template.h"
 
 // トポロジカルソート
 // 時間計算量：O(V + E);

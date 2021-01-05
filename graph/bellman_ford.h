@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "template.h"
+#include "kyopro-library/graph/template.h"
 
 // ベルマンフォード法
 // 頂点sから各頂点までの最短距離を求める

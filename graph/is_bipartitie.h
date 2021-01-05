@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-#include "template.h"
+#include "kyopro-library/graph/template.h"
 
 // グラフが二部グラフかを判定
 // 時間計算量: O(E)

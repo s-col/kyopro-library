@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 
+#include "kyopro-library/mod/ModInt.h"
+
 template <typename T>
 class Matrix {
 protected:
@@ -61,7 +63,7 @@ public:
         const int C = std::max(l.W, r.H);
         for (int i = 0; i < l.H; i++) {
             for (int k = 0; k < C; k++) {
-                const double t = l(i, k);
+                const T t = l(i, k);
                 for (int j = 0; j < r.W; j++) {
                     res(i, j) += t * r(k, j);
                 }
@@ -134,6 +136,55 @@ std::optional<Matrix<T>> solve_leq(const Matrix<T>& A, const Matrix<T>& b, T eps
         if (std::abs(mat(p[i], W)) > eps) return std::nullopt;
     // solve the equation
     Matrix<T> res(W, 1, 0);
+    int cur = 0;
+    for (int i = 0; i < W; i++)
+        if (is_pivot[i]) res(i) = mat(p[cur++], W);
+    return res;
+}
+
+// solve a linear equation: Ax = b, by Gaussian elimination
+// specialization for ModInt
+template <int_fast64_t MOD>
+std::optional<Matrix<ModInt<MOD>>> solve_leq(const Matrix<ModInt<MOD>>& A, const Matrix<ModInt<MOD>>& b) {
+    assert(A.row() == b.row() && b.col() == 1);
+    auto [H, W] = A.size();
+    Matrix<ModInt<MOD>> mat(H, W + 1);  // extended matrix
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j < W; j++) mat(i, j) = A(i, j);
+        mat(i, W) = b(i);
+    }
+    // Gaussian elimination
+    int rank = 0;
+    std::vector<int> p(H);
+    std::vector<int> is_pivot(W, false);
+    std::iota(p.begin(), p.end(), 0);
+    for (int j = 0; j < W; j++) {
+        int pivot = -1;
+        for (int i = rank; i < H; i++)
+            if (mat(p[i], j) != 0) {
+                pivot = i;
+                break;
+            }
+        if (pivot == -1) continue;
+        is_pivot[j] = true;
+        std::swap(p[rank], p[pivot]);
+        const int r_pivot = p[rank];
+        const ModInt<MOD> fac = mat(r_pivot, j).inv();
+        for (int k = 0; k <= W; k++) mat(r_pivot, k) *= fac;
+        for (int i = 0; i < H; i++) {
+            const int row = p[i];
+            if (i != rank && mat(row, j) != 0) {
+                const ModInt<MOD> fac = mat(row, j);
+                for (int k = 0; k <= W; k++) mat(row, k) -= mat(r_pivot, k) * fac;
+            }
+        }
+        ++rank;
+    }
+    // Determine the existence of a solution
+    for (int i = rank; i < H; i++)
+        if (mat(p[i], W) != 0) return std::nullopt;
+    // solve the equation
+    Matrix<ModInt<MOD>> res(W, 1, 0);
     int cur = 0;
     for (int i = 0; i < W; i++)
         if (is_pivot[i]) res(i) = mat(p[cur++], W);

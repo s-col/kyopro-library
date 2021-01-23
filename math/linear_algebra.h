@@ -12,7 +12,7 @@ public:
     Matrix() noexcept : H(0), W(0) {}
     Matrix(int H, int W = 1, T a = T(0)) noexcept : H(H), W(W), mat(a, H * W) {}
     Matrix(std::initializer_list<T> list) noexcept : H(list.size()), W(1), mat(list) {}
-    void resize(int H, int W, T a = T(0)) noexcept {
+    void reshape(int H, int W, T a = T(0)) noexcept {
         if (H * W > this->H * this->W) {
             this->mat.resize(H * W, a);
         }

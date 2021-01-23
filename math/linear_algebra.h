@@ -63,9 +63,9 @@ public:
         const int C = std::max(l.W, r.H);
         for (int i = 0; i < l.H; i++) {
             for (int k = 0; k < C; k++) {
-                const T t = l(i, k);
+                const T t = l.mat[i * l.W + k];
                 for (int j = 0; j < r.W; j++) {
-                    res(i, j) += t * r(k, j);
+                    res.mat[i * res.W + j] += t * r.mat[k * r.W + j];
                 }
             }
         }
@@ -84,7 +84,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Matrix& r) {
         for (int i = 0; i < r.H; i++) {
             for (int j = 0; j < r.W; j++) {
-                os << r(i, j) << " ";
+                os << r.mat[i * r.W + j] << " ";
             }
             if (i != r.H - 1) {
                 os << "\n";

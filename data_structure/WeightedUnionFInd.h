@@ -15,8 +15,7 @@ public:
     int root(int x) {
         if (par[x] == x) {
             return x;
-        }
-        else {
+        } else {
             int rt = root(par[x]);
             potential[x] += potential[par[x]];
             return par[x] = rt;

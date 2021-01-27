@@ -81,8 +81,7 @@ public:
         if (k < 0) {
             tmp = this->inv();
             k = -k;
-        }
-        else {
+        } else {
             tmp = *this;
         }
         for (; k > 0; k >>= 1) {

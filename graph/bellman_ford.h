@@ -34,8 +34,7 @@ bool bellman_ford(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     if (update) {
         dist.clear();
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 }
@@ -78,8 +77,7 @@ bool bellman_ford(std::vector<T>& dist, std::vector<int>& prev, const WeightedGr
         dist.clear();
         prev.clear();
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 }

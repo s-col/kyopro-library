@@ -107,8 +107,7 @@ private:
         if (a <= l && r <= b) {
             lazy[k] = h(lazy[k], x);
             return g(vec[k], p(lazy[k], r - l));
-        }
-        else {
+        } else {
             T t1 = _update(a, b, x, k << 1, l, (l + r) >> 1);
             T t2 = _update(a, b, x, (k << 1) | 1, (l + r) >> 1, r);
             return vec[k] = f(t1, t2);
@@ -119,8 +118,7 @@ private:
         eval(k, l, r);
         if (a <= l && r <= b) {
             return vec[k];
-        }
-        else {
+        } else {
             T t1 = _query(a, b, k << 1, l, (l + r) >> 1);
             T t2 = _query(a, b, (k << 1) | 1, (l + r) >> 1, r);
             return f(t1, t2);

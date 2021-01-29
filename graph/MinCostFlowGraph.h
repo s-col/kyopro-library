@@ -6,9 +6,9 @@ template <typename Cap, typename Cost>
 class MinCostFlowGraph {
 private:
     struct _Edge {
-        int to, rev;
+        const int to, rev;
         Cap cap;
-        Cost cost;
+        const Cost cost;
         _Edge() noexcept {}
         _Edge(int to, Cap cap, Cost cost, int rev) noexcept
             : to(to), rev(rev), cap(cap), cost(cost) {}
@@ -29,9 +29,9 @@ public:
         return m;
     }
     struct Edge {
-        int from, to;
-        Cap cap, flow;
-        Cost cost;
+        const int from, to;
+        const Cap cap, flow;
+        const Cost cost;
         Edge() noexcept {}
         Edge(int from, int to, Cap cap, Cap flow, Cost cost) noexcept
             : from(from), to(to), cap(cap), flow(flow), cost(cost) {}
@@ -79,7 +79,7 @@ public:
             dist[s] = 0;
             que.emplace(0, s);
             while (!que.empty()) {
-                auto [d, v] = que.top();
+                const auto [d, v] = que.top();
                 que.pop();
                 if (dist[v] < d) continue;
                 const int m = static_cast<int>(g[v].size());

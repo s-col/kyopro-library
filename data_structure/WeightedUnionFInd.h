@@ -16,7 +16,7 @@ public:
         if (par[x] == x) {
             return x;
         } else {
-            int rt = root(par[x]);
+            const int rt = root(par[x]);
             potential[x] += potential[par[x]];
             return par[x] = rt;
         }

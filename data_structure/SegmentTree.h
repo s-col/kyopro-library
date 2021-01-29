@@ -26,7 +26,6 @@ public:
     }
     explicit SegmentTree(const std::vector<T>& vec, Op op, T id) noexcept
         : n(vec.size()), op(op), id(id) {
-        int n = vec.size();
         sz = 1;
         while (sz < n) sz <<= 1;
         this->vec.assign(sz << 1, id);
@@ -104,7 +103,7 @@ private:
                 return n;
             }
         }
-        int vl = _max_right(idx, check, acc, k << 1, l, mid);
+        const int vl = _max_right(idx, check, acc, k << 1, l, mid);
         if (vl < n) return vl;
         return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
     }
@@ -123,7 +122,7 @@ private:
                 return 0;
             }
         }
-        int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
+        const int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
         if (vr > 0) return vr;
         return _min_left(idx, check, acc, k << 1, l, mid);
     }

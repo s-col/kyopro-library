@@ -7,10 +7,10 @@
 //     E : 作用素のクラス
 // param:
 //     n : 配列の長さ
-//     f : 区間をマージする二項演算
-//     g : 区間に作用する作用素
-//     h : 作用素をマージする二項演算
-//     p : 作用素を比例的に拡大する変換
+//     f(T, T) -> T : 区間をマージする二項演算
+//     g(T, E) -> T : 区間に作用する作用素
+//     h(E, E) -> E : 作用素をマージする二項演算 (ただし，h(e1, e2)(t) = e2(e1(t)))
+//     p(E, int) -> E : 作用素を比例的に拡大する変換
 //     tid : T の単位元
 //     eid : E の単位元
 // method:
@@ -108,8 +108,8 @@ private:
             lazy[k] = h(lazy[k], x);
             return g(vec[k], p(lazy[k], r - l));
         } else {
-            T t1 = _update(a, b, x, k << 1, l, (l + r) >> 1);
-            T t2 = _update(a, b, x, (k << 1) | 1, (l + r) >> 1, r);
+            const T t1 = _update(a, b, x, k << 1, l, (l + r) >> 1);
+            const T t2 = _update(a, b, x, (k << 1) | 1, (l + r) >> 1, r);
             return vec[k] = f(t1, t2);
         }
     }
@@ -119,8 +119,8 @@ private:
         if (a <= l && r <= b) {
             return vec[k];
         } else {
-            T t1 = _query(a, b, k << 1, l, (l + r) >> 1);
-            T t2 = _query(a, b, (k << 1) | 1, (l + r) >> 1, r);
+            const T t1 = _query(a, b, k << 1, l, (l + r) >> 1);
+            const T t2 = _query(a, b, (k << 1) | 1, (l + r) >> 1, r);
             return f(t1, t2);
         }
     }
@@ -134,13 +134,13 @@ private:
         const int mid = (l + r) >> 1;
         if (mid <= idx) return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
         if (idx <= l) {
-            T tmp = f(acc, vec[k]);
+            const T tmp = f(acc, vec[k]);
             if (check(tmp)) {
                 acc = tmp;
                 return n;
             }
         }
-        int vl = _max_right(idx, check, acc, k << 1, l, mid);
+        const int vl = _max_right(idx, check, acc, k << 1, l, mid);
         if (vl < n) return vl;
         return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
     }
@@ -154,13 +154,13 @@ private:
         const int mid = (l + r) >> 1;
         if (mid >= idx) return _min_left(idx, check, acc, k << 1, l, mid);
         if (idx >= r) {
-            T tmp = f(acc, vec[k]);
+            const T tmp = f(acc, vec[k]);
             if (check(tmp)) {
                 acc = tmp;
                 return 0;
             }
         }
-        int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
+        const int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
         if (vr > 0) return vr;
         return _min_left(idx, check, acc, k << 1, l, mid);
     }

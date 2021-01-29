@@ -6,7 +6,7 @@ template <typename Cap>
 class MaxFlowGraph {
 private:
     struct _Edge {
-        int to, rev;
+        const int to, rev;
         Cap cap;
         _Edge() noexcept {}
         _Edge(int to, Cap cap, int rev) noexcept : to(to), rev(rev), cap(cap) {}
@@ -27,8 +27,8 @@ public:
         return m;
     }
     struct Edge {
-        int from, to;
-        Cap cap, flow;
+        const int from, to;
+        const Cap cap, flow;
         Edge() noexcept {}
         Edge(int from, int to, Cap cap, Cap flow) noexcept
             : from(from), to(to), cap(cap), flow(flow) {}
@@ -59,14 +59,14 @@ public:
         std::vector<int> level(n), iter(n);
         std::deque<int> que;
         auto bfs = [&](void) noexcept -> void {
-            level.assign(n, -1);
+            std::fill(level.begin(), level.end(), -1);
             que.clear();
             level[s] = 0;
             que.emplace_back(s);
             while (!que.empty()) {
-                int v = que.front();
+                const int v = que.front();
                 que.pop_front();
-                int sz = static_cast<int>(g[v].size());
+                const int sz = static_cast<int>(g[v].size());
                 for (int i = 0; i < sz; i++) {
                     const _Edge& e = g[v][i];
                     if (e.cap > 0 && level[e.to] < 0) {
@@ -86,7 +86,7 @@ public:
                 _Edge& e = g[v][i];
                 _Edge& re = g[e.to][e.rev];
                 if (level_v > level[e.to] && re.cap > 0) {
-                    int d = self(self, e.to, std::min(f - res, re.cap));
+                    const int d = self(self, e.to, std::min(f - res, re.cap));
                     if (d > 0) {
                         re.cap -= d;
                         e.cap += d;
@@ -103,7 +103,7 @@ public:
             if (level[t] < 0) return flow;
             iter.assign(n, 0);
             while (flow < flow_limit) {
-                Cap f = dfs(dfs, t, flow_limit - flow);
+                const Cap f = dfs(dfs, t, flow_limit - flow);
                 if (f == 0) break;
                 flow += f;
             }
@@ -117,7 +117,7 @@ public:
         res[s] = true;
         que.emplace_back(s);
         while (!que.empty()) {
-            int v = que.front();
+            const int v = que.front();
             que.pop_front();
             for (const auto& edge : g[v]) {
                 if (edge.cap > 0 && !res[edge.to]) {

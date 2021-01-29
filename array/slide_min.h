@@ -5,7 +5,7 @@
 // Kにおける 最小値を格納した配列 y[i] を返す 時間計算量 : O(N)
 template <typename T>
 std::vector<T> slide_min(const std::vector<T>& vec, int k) {
-    int vecl = static_cast<int>(vec.size());
+    const int vecl = static_cast<int>(vec.size());
     std::vector<T> res(vecl - k + 1);
     std::deque<T> deq;
     for (int i = 0; i < k; ++i) {

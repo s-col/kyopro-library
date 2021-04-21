@@ -7,6 +7,7 @@ private:
 
 public:
     CompressedCoordinate() noexcept {}
+    explicit CompressedCoordinate(const std::vector<T>& vec) noexcept : pos(vec) {}
     void add(const T& p_new) noexcept {
         pos.emplace_back(p_new);
     }

@@ -19,7 +19,7 @@ public:
         return std::lower_bound(pos.begin(), pos.end(), key) - pos.begin();
     }
     size_t upper_bound(const T& key) const noexcept {
-        return std::upper_bound(pos.begin(), pos.end(), key) - pos.beegin();
+        return std::upper_bound(pos.begin(), pos.end(), key) - pos.begin();
     }
     size_t operator[](const T& key) const noexcept {
         return lower_bound(key);

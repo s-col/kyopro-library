@@ -62,7 +62,7 @@ public:
         l += sz, r += sz - 1;
         for (; l <= r; l >>= 1, r >>= 1) {
             if (l & 1) l_val = op(l_val, vec[l++]);
-            if (!(r & 1)) r_val = op(r_val, vec[r--]);
+            if (!(r & 1)) r_val = op(vec[r--], r_val);
         }
         return op(l_val, r_val);
     }

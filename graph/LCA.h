@@ -36,6 +36,8 @@ public:
         return par[0][u];
     }
     int parent(int idx, int d) const { return par[d][idx]; }
+    int depth(int idx) const { return dep[idx]; }
+    int dist(int u, int v) const { return dep[u] + dep[v] - dep[lca(u, v)] * 2; }
 
 private:
     void init(const Graph& g, int root) {

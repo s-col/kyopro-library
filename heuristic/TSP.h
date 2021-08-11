@@ -14,7 +14,7 @@ struct XorShift {
         w ^= t ^ (t >> 8) ^ (w >> 19);
         return w / 4294967296.0;
     }
-    // node: [a, b]
+    // note: [a, b]
     int randint(int a, int b) noexcept {
         return static_cast<int>(urand() * (b - a + 1)) + a;
     }

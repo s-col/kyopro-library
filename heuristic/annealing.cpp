@@ -21,6 +21,7 @@ void solve_annealing() {
             if (std::chrono::system_clock::now() - t_start >= T_LIMIT) {
                 break;
             }
+            i_time = 0;
         }
     }
     std::cerr << "count:\t" << count << "\n";

@@ -79,8 +79,6 @@ public:
         const auto t_start = std::chrono::system_clock::now();
         const auto time_limit_chrono = std::chrono::milliseconds(time_limit);
         T cost = calc_cost();
-        T best_cost = cost;
-        auto best_sol = sol;
         while (std::chrono::system_clock::now() - t_start < time_limit_chrono) {
             auto pre = sol;
             T diff = double_bridge();
@@ -102,16 +100,11 @@ public:
             }
             if (diff < 0) {
                 cost += diff;
-                if (cost < best_cost) {
-                    best_sol = sol;
-                    best_cost = cost;
-                }
             } else {
                 sol = std::move(pre);
             }
         }
-        std::swap(sol, best_sol);
-        sol_cost = best_cost;
+        sol_cost = cost;
     }
     // arguments:
     //   timei_limit: [ms]

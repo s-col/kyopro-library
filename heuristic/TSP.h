@@ -32,16 +32,19 @@ private:
     static constexpr int TH_EXACTLY = 18;
 
 public:
-    explicit TSP(int n, const std::vector<std::vector<T>>& dist)
-        : DIST(dist), N(n) {
+    explicit TSP(int n, const std::vector<std::vector<T>>& dist) : DIST(dist), N(n) {
         sol.resize(N);
         iota(sol.begin(), sol.end(), 0);
         vers.resize(N);
         iota(vers.begin(), vers.end(), 0);
     }
 
-    const std::vector<int>& get_sol() const noexcept { return sol; }
-    T get_cost() const noexcept { return sol_cost; }
+    const std::vector<int>& get_sol() const noexcept {
+        return sol;
+    }
+    T get_cost() const noexcept {
+        return sol_cost;
+    }
 
     void solve_exactly() {
         std::vector dp(1u << N, std::vector<T>(N, INF));
@@ -49,12 +52,15 @@ public:
         dp[0][0] = T(0);
         for (uint32_t mask = 0; mask < 1u << N; mask++) {
             for (int i = 0; i < N; i++) {
-                if (~mask >> i & 1) continue;
+                if (~mask >> i & 1)
+                    continue;
                 for (int j = 0; j < N; j++) {
-                    if (i == j) continue;
+                    if (i == j)
+                        continue;
                     uint32_t pre_mask = mask & ~(1u << i);
                     T pre_cost = dp[pre_mask][j];
-                    if (pre_cost == INF) continue;
+                    if (pre_cost == INF)
+                        continue;
                     if (dp[mask][i] > pre_cost + DIST[j][i]) {
                         dp[mask][i] = pre_cost + DIST[j][i];
                         pre[mask][i] = j;
@@ -128,13 +134,16 @@ private:
     }
 
     T calc_diff_two_opt(int i, int j) const {
-        if (i > j) std::swap(i, j);
+        if (i > j)
+            std::swap(i, j);
         if (i == 0 && j == N - 1) {
             return T(0);
         }
         int ii = i - 1, jj = j + 1;
-        if (ii < 0) ii = N - 1;
-        if (jj == N) jj = 0;
+        if (ii < 0)
+            ii = N - 1;
+        if (jj == N)
+            jj = 0;
         T res = T(0);
         res += DIST[sol[ii]][sol[j]] + DIST[sol[i]][sol[jj]];
         res -= DIST[sol[ii]][sol[i]] + DIST[sol[j]][sol[jj]];
@@ -142,7 +151,8 @@ private:
     }
 
     void apply_two_opt(int i, int j) {
-        if (i > j) std::swap(i, j);
+        if (i > j)
+            std::swap(i, j);
         std::reverse(sol.begin() + i, sol.begin() + j + 1);
     }
 
@@ -151,12 +161,16 @@ private:
         std::sort(chosen.begin(), chosen.end());
         const auto [x0, x1, x2, x3] = chosen;
         int y0 = x0 + 1, y1 = x1 + 1, y2 = x2 + 1, y3 = x3 + 1;
-        if (y3 == N) y3 = 0;
+        if (y3 == N)
+            y3 = 0;
         T res = T(0);
-        res += DIST[sol[x0]][sol[y2]] + DIST[sol[x1]][sol[y3]] + DIST[sol[x2]][sol[y0]] + DIST[sol[x3]][sol[y1]];
-        res -= DIST[sol[x0]][sol[y0]] + DIST[sol[x1]][sol[y1]] + DIST[sol[x2]][sol[y2]] + DIST[sol[x3]][sol[y3]];
+        res += DIST[sol[x0]][sol[y2]] + DIST[sol[x1]][sol[y3]] + DIST[sol[x2]][sol[y0]] +
+               DIST[sol[x3]][sol[y1]];
+        res -= DIST[sol[x0]][sol[y0]] + DIST[sol[x1]][sol[y1]] + DIST[sol[x2]][sol[y2]] +
+               DIST[sol[x3]][sol[y3]];
         std::vector<int> sol_tmp(N);
-        if (y3 == 0) y3 = N;
+        if (y3 == 0)
+            y3 = N;
         auto itr = sol_tmp.begin();
         itr = std::copy(sol.begin(), sol.begin() + x0 + 1, itr);
         itr = std::copy(sol.begin() + y2, sol.begin() + x3 + 1, itr);

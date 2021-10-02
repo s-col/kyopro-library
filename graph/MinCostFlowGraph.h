@@ -23,7 +23,8 @@ public:
         const int from_id = static_cast<int>(g[from].size());
         int to_id = static_cast<int>(g[to].size());
         pos.emplace_back(from, static_cast<int>(g[from].size()));
-        if (from == to) ++to_id;
+        if (from == to)
+            ++to_id;
         g[from].emplace_back(to, cap, cost, to_id);
         g[to].emplace_back(from, 0, -cost, from_id);
         return m;
@@ -45,7 +46,8 @@ public:
         const int m = static_cast<int>(pos.size());
         std::vector<Edge> res;
         res.reserve(m);
-        for (int i = 0; i < m; i++) res.emplace_back(get_edge(i));
+        for (int i = 0; i < m; i++)
+            res.emplace_back(get_edge(i));
         return res;
     }
     std::pair<Cap, Cost> flow(int s, int t) noexcept {
@@ -66,9 +68,10 @@ public:
         struct Q {
             Cost key;
             int to;
-            Q(Cost key, int to)
-            noexcept : key(key), to(to) {}
-            bool operator>(const Q& r) const noexcept { return key > r.key; }
+            Q(Cost key, int to) noexcept : key(key), to(to) {}
+            bool operator>(const Q& r) const noexcept {
+                return key > r.key;
+            }
         };
         Cap flow = 0;
         Cost cost = 0, prev_cost = -1;
@@ -81,7 +84,8 @@ public:
             while (!que.empty()) {
                 const auto [d, v] = que.top();
                 que.pop();
-                if (dist[v] < d) continue;
+                if (dist[v] < d)
+                    continue;
                 const int m = static_cast<int>(g[v].size());
                 for (int i = 0; i < m; i++) {
                     const _Edge& e = g[v][i];
@@ -94,8 +98,10 @@ public:
                     }
                 }
             }
-            if (dist[t] == C_INF) break;
-            for (int i = 0; i < n; i++) h[i] += dist[i];
+            if (dist[t] == C_INF)
+                break;
+            for (int i = 0; i < n; i++)
+                h[i] += dist[i];
             Cap f = flow_limit - flow;
             for (int i = t; i != s; i = prevv[i]) {
                 f = std::min(f, g[prevv[i]][preve[i]].cap);
@@ -108,7 +114,8 @@ public:
             Cost d = h[t];
             flow += f;
             cost += f * d;
-            if (prev_cost == d) res.pop_back();
+            if (prev_cost == d)
+                res.pop_back();
             res.emplace_back(flow, cost);
             prev_cost = d;
         }

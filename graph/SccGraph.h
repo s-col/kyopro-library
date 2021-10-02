@@ -21,17 +21,20 @@ public:
         auto dfs1 = [&](auto&& self, int idx) noexcept -> void {
             used[idx] = true;
             for (const auto& v : g[idx])
-                if (!used[v]) self(self, v);
+                if (!used[v])
+                    self(self, v);
             vs.emplace_back(idx);
         };
         auto dfs2 = [&](auto&& self, int idx) noexcept -> void {
             used[idx] = true;
             res.back().emplace_back(idx);
             for (const auto& v : rg[idx])
-                if (!used[v]) self(self, v);
+                if (!used[v])
+                    self(self, v);
         };
         for (int i = 0; i < n; i++) {
-            if (!used[i]) dfs1(dfs1, i);
+            if (!used[i])
+                dfs1(dfs1, i);
         }
         used.assign(n, false);
         for (int i = n - 1; i >= 0; i--) {

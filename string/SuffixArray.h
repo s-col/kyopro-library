@@ -49,11 +49,21 @@ public:
     int count(const Vec& vec) const noexcept {
         return upper_bound(vec) - lower_bound(vec);
     }
-    const Vec& get_src() const noexcept { return src; }
-    const int& operator[](int i) const noexcept { return sa[i]; }
-    size_t size() const noexcept { return sa.size(); };
-    std::vector<int>::const_iterator begin() const noexcept { return sa.cbegin(); }
-    std::vector<int>::const_iterator end() const noexcept { return sa.cend(); }
+    const Vec& get_src() const noexcept {
+        return src;
+    }
+    const int& operator[](int i) const noexcept {
+        return sa[i];
+    }
+    size_t size() const noexcept {
+        return sa.size();
+    };
+    std::vector<int>::const_iterator begin() const noexcept {
+        return sa.cbegin();
+    }
+    std::vector<int>::const_iterator end() const noexcept {
+        return sa.cend();
+    }
 
 private:
     int le_comp(const Vec& a, int sh) const noexcept {
@@ -64,7 +74,8 @@ private:
                 return 1;
             else if (a[i] > src[sh + i])
                 return -1;
-            if (sh + i == n) return 1;
+            if (sh + i == n)
+                return 1;
         }
         return 0;
     }
@@ -77,8 +88,10 @@ private:
         const int n_seed = static_cast<int>(seed.size());
         std::vector<int> res(n, -1);
         std::vector<int> bin(k + 1);
-        for (const auto& ch : s) ++bin[ch + 1];
-        for (int i = 1; i < k + 1; i++) bin[i] += bin[i - 1];
+        for (const auto& ch : s)
+            ++bin[ch + 1];
+        for (int i = 1; i < k + 1; i++)
+            bin[i] += bin[i - 1];
         std::vector<int> count(k);
         for (int i = n_seed - 1; i >= 0; i--) {
             const int& idx = seed[i];
@@ -120,14 +133,16 @@ private:
         }
         std::vector<int> lmss;
         for (int i = 0; i < n; i++)
-            if (is_LMS(t, i)) lmss.emplace_back(i);
+            if (is_LMS(t, i))
+                lmss.emplace_back(i);
         const int n_lms = static_cast<int>(lmss.size());
         std::vector<int> seed = lmss;
         auto sa = induced_sort(s, t, seed, k);
         std::vector<int> sa_lms;
         sa_lms.reserve(n_lms);
         for (const auto& idx : sa)
-            if (is_LMS(t, idx)) sa_lms.emplace_back(idx);
+            if (is_LMS(t, idx))
+                sa_lms.emplace_back(idx);
         std::vector<int> dic(n, -1);
         int nt = 0;
         dic[sa_lms[0]] = 0;
@@ -137,13 +152,15 @@ private:
             bool is_diff = false;
             for (int d = 0;; d++) {
                 bool fx = is_LMS(t, x + d), fy = is_LMS(t, y + d);
-                if (d > 0 && fx && fy) break;
+                if (d > 0 && fx && fy)
+                    break;
                 if (s[x + d] != s[y + d] || (d > 0 && (fx || fy))) {
                     is_diff = true;
                     break;
                 }
             }
-            if (is_diff) ++nt;
+            if (is_diff)
+                ++nt;
             dic[y] = nt;
         }
         {
@@ -153,8 +170,10 @@ private:
         if (n_lms > nt + 1)
             seed = sa_is(dic, nt + 1);
         else
-            for (int i = 0; i < n_lms; i++) seed[dic[i]] = i;
-        for (int i = 0; i < n_lms; i++) seed[i] = lmss[seed[i]];
+            for (int i = 0; i < n_lms; i++)
+                seed[dic[i]] = i;
+        for (int i = 0; i < n_lms; i++)
+            seed[i] = lmss[seed[i]];
         sa = induced_sort(s, t, seed, k);
         return sa;
     }
@@ -182,22 +201,37 @@ public:
         const int n = static_cast<int>(src.size());
         lcp.resize(n);
         std::vector<int> rank(n + 1);
-        for (int i = 0; i <= n; i++) rank[sa[i]] = i;
+        for (int i = 0; i <= n; i++)
+            rank[sa[i]] = i;
         int h = 0;
         lcp[0] = 0;
         for (int i = 0; i < n; i++) {
             int j = sa[rank[i] - 1];
-            if (h > 0) --h;
+            if (h > 0)
+                --h;
             for (; i + h < n && j + h < n; h++) {
-                if (src[i + h] != src[j + h]) break;
+                if (src[i + h] != src[j + h])
+                    break;
             }
             lcp[rank[i] - 1] = h;
         }
     }
-    const Vec& get_src() const noexcept { return src; }
-    const SuffixArray<Vec>& get_sa() const noexcept { return sa; }
-    const int& operator[](int i) const noexcept { return lcp[i]; }
-    size_t size() const noexcept { return lcp.size(); }
-    std::vector<int>::const_iterator begin() const noexcept { return lcp.cbegin(); };
-    std::vector<int>::const_iterator end() const noexcept { return lcp.cend(); }
+    const Vec& get_src() const noexcept {
+        return src;
+    }
+    const SuffixArray<Vec>& get_sa() const noexcept {
+        return sa;
+    }
+    const int& operator[](int i) const noexcept {
+        return lcp[i];
+    }
+    size_t size() const noexcept {
+        return lcp.size();
+    }
+    std::vector<int>::const_iterator begin() const noexcept {
+        return lcp.cbegin();
+    };
+    std::vector<int>::const_iterator end() const noexcept {
+        return lcp.cend();
+    }
 };

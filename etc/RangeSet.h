@@ -11,10 +11,16 @@ public:
         data.emplace(-INF, -INF);
         data.emplace(INF, INF);
     }
-    const std::set<std::pair<T, T>>& get_data() const noexcept { return data; }
-    std::set<std::pair<T, T>>& get_data() noexcept { return data; }
+    const std::set<std::pair<T, T>>& get_data() const noexcept {
+        return data;
+    }
+    std::set<std::pair<T, T>>& get_data() noexcept {
+        return data;
+    }
     // Insert [a, a + 1)
-    void insert(T a) noexcept { insert(a, a + 1); }
+    void insert(T a) noexcept {
+        insert(a, a + 1);
+    }
     // Insert [a, b)
     void insert(T a, T b) noexcept {
         auto itr = std::prev(data.lower_bound({a, b}));

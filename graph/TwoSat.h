@@ -36,7 +36,8 @@ public:
     std::vector<bool> answer() {
         std::vector<bool> res(n);
         for (int i = 0; i < n; i++)
-            if (scc_ord[i] > scc_ord[i + n]) res[i] = true;
+            if (scc_ord[i] > scc_ord[i + n])
+                res[i] = true;
         return res;
     }
 };

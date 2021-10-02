@@ -18,16 +18,17 @@ private:
     int sz;
 
 public:
-    explicit SegmentTree(int n, Op op, T id) noexcept
-        : n(n), op(op), id(id) {
+    explicit SegmentTree(int n, Op op, T id) noexcept : n(n), op(op), id(id) {
         sz = 1;
-        while (sz < n) sz <<= 1;
+        while (sz < n)
+            sz <<= 1;
         vec.assign(sz << 1, id);
     }
     explicit SegmentTree(const std::vector<T>& vec, Op op, T id) noexcept
         : n(vec.size()), op(op), id(id) {
         sz = 1;
-        while (sz < n) sz <<= 1;
+        while (sz < n)
+            sz <<= 1;
         this->vec.assign(sz << 1, id);
         set_array(vec);
     }
@@ -61,8 +62,10 @@ public:
         T l_val = id, r_val = id;
         l += sz, r += sz - 1;
         for (; l <= r; l >>= 1, r >>= 1) {
-            if (l & 1) l_val = op(l_val, vec[l++]);
-            if (!(r & 1)) r_val = op(vec[r--], r_val);
+            if (l & 1)
+                l_val = op(l_val, vec[l++]);
+            if (!(r & 1))
+                r_val = op(vec[r--], r_val);
         }
         return op(l_val, r_val);
     }
@@ -95,7 +98,8 @@ private:
             return check(acc) ? n : k - sz;
         }
         const int mid = (l + r) >> 1;
-        if (mid <= idx) return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
+        if (mid <= idx)
+            return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
         if (idx <= l) {
             T tmp = op(acc, vec[k]);
             if (check(tmp)) {
@@ -104,7 +108,8 @@ private:
             }
         }
         const int vl = _max_right(idx, check, acc, k << 1, l, mid);
-        if (vl < n) return vl;
+        if (vl < n)
+            return vl;
         return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
     }
     template <class F>
@@ -114,7 +119,8 @@ private:
             return check(acc) ? 0 : k - sz + 1;
         }
         const int mid = (l + r) >> 1;
-        if (mid >= idx) return _min_left(idx, check, acc, k << 1, l, mid);
+        if (mid >= idx)
+            return _min_left(idx, check, acc, k << 1, l, mid);
         if (idx >= r) {
             T tmp = op(acc, vec[k]);
             if (check(tmp)) {
@@ -123,7 +129,8 @@ private:
             }
         }
         const int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
-        if (vr > 0) return vr;
+        if (vr > 0)
+            return vr;
         return _min_left(idx, check, acc, k << 1, l, mid);
     }
 };

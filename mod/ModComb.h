@@ -42,6 +42,10 @@ public:
         return res;
     }
 
-    ModInt<Modulus> get_fac(i64 n) const noexcept { return fac[n]; }
-    ModInt<Modulus> get_finv(i64 n) const noexcept { return finv[n]; }
+    ModInt<Modulus> get_fac(i64 n) const noexcept {
+        return fac[n];
+    }
+    ModInt<Modulus> get_finv(i64 n) const noexcept {
+        return finv[n];
+    }
 };

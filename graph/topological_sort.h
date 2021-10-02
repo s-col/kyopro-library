@@ -23,7 +23,8 @@ bool topological_sort(std::vector<int>& res, const Graph& g) {
     }
     std::stack<int> st;
     for (int i = 0; i < n; ++i) {
-        if (indeg[i] == 0) st.push(i);
+        if (indeg[i] == 0)
+            st.push(i);
     }
     int idx = 0;
     while (!st.empty()) {
@@ -33,7 +34,8 @@ bool topological_sort(std::vector<int>& res, const Graph& g) {
         for (const auto& to : g[u]) {
             --indeg[to];
             --e;
-            if (indeg[to] == 0) st.push(to);
+            if (indeg[to] == 0)
+                st.push(to);
         }
     }
     if (e > 0) {

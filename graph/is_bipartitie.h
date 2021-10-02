@@ -16,7 +16,8 @@ int is_bipartite(const Graph& g) {
     while (!st.empty()) {
         auto [v, color] = st.top();
         st.pop();
-        if (color == 1) ++white_cnt;
+        if (color == 1)
+            ++white_cnt;
         colors[v] = color;
         for (const auto& to : g[v]) {
             if (colors[to] == color) {

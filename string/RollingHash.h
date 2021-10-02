@@ -17,10 +17,13 @@ public:
             pows[i + 1] = pows[i] * base % MOD;
         }
     }
-    u64 hash() const noexcept { return cum[sz]; }
+    u64 hash() const noexcept {
+        return cum[sz];
+    }
     u64 hash(int l, int r) const noexcept {
         u64 res = cum[r] + MOD - cum[l] * pows[r - l] % MOD;
-        if (res >= MOD) res -= MOD;
+        if (res >= MOD)
+            res -= MOD;
         return res;
     }
 };

@@ -9,14 +9,17 @@ std::vector<T> slide_max(const std::vector<T>& vec, int k) {
     std::vector<T> res(vecl - k + 1);
     std::deque<T> deq;
     for (int i = 0; i < k; ++i) {
-        while (!deq.empty() && vec[deq.back()] <= vec[i]) deq.pop_back();
+        while (!deq.empty() && vec[deq.back()] <= vec[i])
+            deq.pop_back();
         deq.push_back(i);
     }
     res[0] = vec[deq.front()];
     for (int i = k; i < vecl; ++i) {
-        while (!deq.empty() && vec[deq.back()] <= vec[i]) deq.pop_back();
+        while (!deq.empty() && vec[deq.back()] <= vec[i])
+            deq.pop_back();
         deq.push_back(i);
-        if (deq.front() == i - k) deq.pop_front();
+        if (deq.front() == i - k)
+            deq.pop_front();
         res[i - k + 1] = vec[deq.front()];
     }
     return res;

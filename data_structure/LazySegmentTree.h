@@ -48,8 +48,12 @@ public:
         lazy.assign(sz * 2, eid);
         set_array(vec);
     }
-    T& operator[](int idx) noexcept { return vec[sz + idx]; }
-    void set_value(int idx, T val) noexcept { vec[sz + idx] = val; }
+    T& operator[](int idx) noexcept {
+        return vec[sz + idx];
+    }
+    void set_value(int idx, T val) noexcept {
+        vec[sz + idx] = val;
+    }
     template <class RandomIt>
     void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
@@ -63,9 +67,15 @@ public:
             vec[i] = f(vec[i << 1], vec[(i << 1) | 1]);
         }
     }
-    void update(int a, int b, E x) noexcept { _update(a, b, x, 1, 0, sz); }
-    T query(int a, int b) noexcept { return _query(a, b, 1, 0, sz); }
-    T query_all() noexcept { return query(0, sz); }
+    void update(int a, int b, E x) noexcept {
+        _update(a, b, x, 1, 0, sz);
+    }
+    T query(int a, int b) noexcept {
+        return _query(a, b, 1, 0, sz);
+    }
+    T query_all() noexcept {
+        return query(0, sz);
+    }
     // Return the largest x such that check(A[idx] op ... op A[x - 1]) == true
     // complexity: O(log (n))
     template <class C>

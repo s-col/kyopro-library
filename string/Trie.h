@@ -1,7 +1,8 @@
 // Trie木
 // add: O(|S|)
 // search: O(|S|)
-// 参考: https://algo-logic.info/trie-tree/#:~:text=Trie%E6%9C%A8%E3%81%AF%E3%80%81%E5%8A%B9%E7%8E%87%E7%9A%84,%E3%81%95%E3%82%92M%20%E3%81%A8%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%EF%BC%89
+// 参考:
+// https://algo-logic.info/trie-tree/#:~:text=Trie%E6%9C%A8%E3%81%AF%E3%80%81%E5%8A%B9%E7%8E%87%E7%9A%84,%E3%81%95%E3%82%92M%20%E3%81%A8%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%EF%BC%89
 template <int char_num, char base>
 class Trie {
 private:

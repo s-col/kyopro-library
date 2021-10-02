@@ -21,7 +21,8 @@ public:
         const int from_id = static_cast<int>(g[from].size());
         int to_id = static_cast<int>(g[to].size());
         pos.emplace_back(from, static_cast<int>(g[from].size()));
-        if (from == to) ++to_id;
+        if (from == to)
+            ++to_id;
         g[from].emplace_back(to, cap, to_id);
         g[to].emplace_back(from, 0, from_id);
         return m;
@@ -42,7 +43,8 @@ public:
         const int m = static_cast<int>(pos.size());
         std::vector<Edge> res;
         res.reserve(m);
-        for (int i = 0; i < m; i++) res.emplace_back(get_edge(i));
+        for (int i = 0; i < m; i++)
+            res.emplace_back(get_edge(i));
         return res;
     }
     void change_edge(int i, Cap new_cap, Cap new_flow) noexcept {
@@ -71,14 +73,16 @@ public:
                     const _Edge& e = g[v][i];
                     if (e.cap > 0 && level[e.to] < 0) {
                         level[e.to] = level[v] + 1;
-                        if (e.to == t) return;
+                        if (e.to == t)
+                            return;
                         que.emplace_back(e.to);
                     }
                 }
             }
         };
         auto dfs = [&](auto&& self, int v, Cap f) noexcept -> Cap {
-            if (v == s) return f;
+            if (v == s)
+                return f;
             const int sz = static_cast<int>(g[v].size());
             const int level_v = level[v];
             Cap res = 0;
@@ -91,7 +95,8 @@ public:
                         re.cap -= d;
                         e.cap += d;
                         res += d;
-                        if (res == f) break;
+                        if (res == f)
+                            break;
                     }
                 }
             }
@@ -100,11 +105,13 @@ public:
         Cap flow = 0;
         while (flow < flow_limit) {
             bfs();
-            if (level[t] < 0) return flow;
+            if (level[t] < 0)
+                return flow;
             iter.assign(n, 0);
             while (flow < flow_limit) {
                 const Cap f = dfs(dfs, t, flow_limit - flow);
-                if (f == 0) break;
+                if (f == 0)
+                    break;
                 flow += f;
             }
         }

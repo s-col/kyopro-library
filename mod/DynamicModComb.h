@@ -43,6 +43,10 @@ public:
         return res;
     }
 
-    DynamicModInt<Modulus> get_fac(i64 n) const noexcept { return fac[n]; }
-    DynamicModInt<Modulus> get_finv(i64 n) const noexcept { return finv[n]; }
+    DynamicModInt<Modulus> get_fac(i64 n) const noexcept {
+        return fac[n];
+    }
+    DynamicModInt<Modulus> get_finv(i64 n) const noexcept {
+        return finv[n];
+    }
 };

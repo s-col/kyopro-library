@@ -63,8 +63,10 @@ std::vector<double> fft_convolution(const std::vector<T>& a, const std::vector<T
         sz <<= 1, ++deg;
     }
     std::vector<Complex> ca(sz), cb(sz);
-    for (int i = 0; i < na; i++) ca[i] = a[i];
-    for (int i = 0; i < nb; i++) cb[i] = b[i];
+    for (int i = 0; i < na; i++)
+        ca[i] = a[i];
+    for (int i = 0; i < nb; i++)
+        cb[i] = b[i];
     auto dft = [](std::vector<Complex>& vec, int d, bool inverse = false) noexcept -> void {
         constexpr double PI = std::acos(-1);
         const double sgn = inverse ? -1.0 : 1.0;
@@ -96,10 +98,12 @@ std::vector<double> fft_convolution(const std::vector<T>& a, const std::vector<T
         }
     };
     dft(ca, deg), dft(cb, deg);
-    for (int i = 0; i < sz; i++) ca[i] *= cb[i];
+    for (int i = 0; i < sz; i++)
+        ca[i] *= cb[i];
     dft(ca, deg, true);
     std::vector<double> res(sz);
-    for (int i = 0; i < sz; i++) res[i] = ca[i].real / sz;
+    for (int i = 0; i < sz; i++)
+        res[i] = ca[i].real / sz;
     return res;
 }
 
@@ -162,13 +166,17 @@ std::vector<double> fft_convolution(const std::vector<T>& a, const std::vector<T
     const int na = static_cast<int>(a.size());
     const int nb = static_cast<int>(b.size());
     int sz = 1;
-    while (sz < na + nb) sz <<= 1;
+    while (sz < na + nb)
+        sz <<= 1;
     std::vector<Comprex> ca(sz), cb(sz);
-    for (int i = 0; i < na; i++) ca[i] = a[i];
-    for (int i = 0; i < nb; i++) cb[i] = b[i];
+    for (int i = 0; i < na; i++)
+        ca[i] = a[i];
+    for (int i = 0; i < nb; i++)
+        cb[i] = b[i];
     auto dft = [](auto&& self, std::vector<Comprex>& vec, bool inverse = false) noexcept -> void {
         const int sz_vec = static_cast<int>(vec.size());
-        if (sz_vec == 1) return;
+        if (sz_vec == 1)
+            return;
         std::vector<Comprex> vec_a, vec_b;
         vec_a.reserve(sz_vec >> 1), vec_b.reserve(sz_vec >> 1);
         for (int i = 0; i < (sz_vec >> 1); i++) {
@@ -180,14 +188,17 @@ std::vector<double> fft_convolution(const std::vector<T>& a, const std::vector<T
         const double omega = -2.0 * PI / sz_vec * (inverse ? -1.0 : 1.0);
         for (int i = 0; i < sz_vec; i++) {
             int idx = i;
-            if (idx >= (sz_vec >> 1)) idx -= sz_vec >> 1;
+            if (idx >= (sz_vec >> 1))
+                idx -= sz_vec >> 1;
             vec[i] = vec_a[idx] + Comprex::polar(omega * i) * vec_b[idx];
         }
     };
     dft(dft, ca), dft(dft, cb);
-    for (int i = 0; i < sz; i++) ca[i] *= cb[i];
+    for (int i = 0; i < sz; i++)
+        ca[i] *= cb[i];
     dft(dft, ca, true);
     std::vector<double> res(sz);
-    for (int i = 0; i < sz; i++) res[i] = ca[i].real / sz;
+    for (int i = 0; i < sz; i++)
+        res[i] = ca[i].real / sz;
     return res;
 }

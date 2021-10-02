@@ -10,7 +10,8 @@ std::vector<int> z_algorithm(const std::string& s) {
     res[0] = sl;
     int i = 1, j = 0;
     while (i < sl) {
-        while (i + j < sl && s[j] == s[i + j]) ++j;
+        while (i + j < sl && s[j] == s[i + j])
+            ++j;
         res[i] = j;
         if (j == 0) {
             ++i;

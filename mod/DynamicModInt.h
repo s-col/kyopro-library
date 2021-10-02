@@ -11,10 +11,13 @@ private:
 
 public:
     constexpr DynamicModInt(const i64 x = 0) noexcept : m_value(x % Modulus) {
-        if (m_value < 0) m_value += Modulus;
+        if (m_value < 0)
+            m_value += Modulus;
     }
 
-    constexpr i64 const& value() const noexcept { return m_value; }
+    constexpr i64 const& value() const noexcept {
+        return m_value;
+    }
 
     constexpr DynamicModInt& operator+=(const DynamicModInt rhs) noexcept {
         m_value += rhs.m_value;
@@ -69,7 +72,8 @@ public:
             std::swap(u, v);
         }
         u %= Modulus;
-        if (u < 0) u += Modulus;
+        if (u < 0)
+            u += Modulus;
         return u;
     }
 
@@ -83,22 +87,27 @@ public:
             tmp = *this;
         }
         for (; k > 0; k >>= 1) {
-            if (k & 1) res *= tmp;
+            if (k & 1)
+                res *= tmp;
             tmp *= tmp;
         }
         return res;
     }
 
-    friend constexpr DynamicModInt operator+(const DynamicModInt& lhs, const DynamicModInt& rhs) noexcept {
+    friend constexpr DynamicModInt operator+(const DynamicModInt& lhs,
+                                             const DynamicModInt& rhs) noexcept {
         return DynamicModInt<Modulus>(lhs) += rhs;
     }
-    friend constexpr DynamicModInt operator-(const DynamicModInt& lhs, const DynamicModInt& rhs) noexcept {
+    friend constexpr DynamicModInt operator-(const DynamicModInt& lhs,
+                                             const DynamicModInt& rhs) noexcept {
         return DynamicModInt<Modulus>(lhs) -= rhs;
     }
-    friend constexpr DynamicModInt operator*(const DynamicModInt& lhs, const DynamicModInt& rhs) noexcept {
+    friend constexpr DynamicModInt operator*(const DynamicModInt& lhs,
+                                             const DynamicModInt& rhs) noexcept {
         return DynamicModInt<Modulus>(lhs) *= rhs;
     }
-    friend constexpr DynamicModInt operator/(const DynamicModInt& lhs, const DynamicModInt& rhs) noexcept {
+    friend constexpr DynamicModInt operator/(const DynamicModInt& lhs,
+                                             const DynamicModInt& rhs) noexcept {
         return DynamicModInt<Modulus>(lhs) /= rhs;
     }
 

@@ -10,7 +10,8 @@ private:
 
 public:
     WeightedUnionFind(int N, T id) : par(N), sz(N, 1), potential(N, id), id(id) {
-        for (int i = 0; i < N; ++i) par[i] = i;
+        for (int i = 0; i < N; ++i)
+            par[i] = i;
     }
     int root(int x) {
         if (par[x] == x) {
@@ -36,8 +37,10 @@ public:
     void unite(int x, int y, T w) {
         w += weight(x), w -= weight(y);
         x = root(x), y = root(y);
-        if (x == y) return;
-        if (sz[x] < sz[y]) std::swap(x, y), w = -w;
+        if (x == y)
+            return;
+        if (sz[x] < sz[y])
+            std::swap(x, y), w = -w;
         par[y] = x;
         sz[x] += sz[y];
         potential[y] = w;
@@ -47,7 +50,8 @@ public:
     }
     void reset(int N) {
         par.resize(N);
-        for (int i = 0; i < N; ++i) par[i] = i;
+        for (int i = 0; i < N; ++i)
+            par[i] = i;
         sz.assign(N, 1);
         potential.assign(N, id);
     }

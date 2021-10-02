@@ -9,11 +9,16 @@ template <int_fast64_t Modulus, class T>
 std::vector<ModInt<Modulus>> ntt_convolution(const std::vector<T>& a, const std::vector<T>& b) {
     using mint_t = ModInt<Modulus>;
     constexpr std::pair<mint_t, int> mod_info = []() -> std::pair<mint_t, int> {
-        if (Modulus == 2) return {mint_t(1).pow(1), 0};
-        if (Modulus == 167772161) return {mint_t(3).pow(5), 25};
-        if (Modulus == 469762049) return {mint_t(3).pow(7), 26};
-        if (Modulus == 754974721) return {mint_t(11).pow(45), 24};
-        if (Modulus == 998244353) return {mint_t(3).pow(119), 23};
+        if (Modulus == 2)
+            return {mint_t(1).pow(1), 0};
+        if (Modulus == 167772161)
+            return {mint_t(3).pow(5), 25};
+        if (Modulus == 469762049)
+            return {mint_t(3).pow(7), 26};
+        if (Modulus == 754974721)
+            return {mint_t(11).pow(45), 24};
+        if (Modulus == 998244353)
+            return {mint_t(3).pow(119), 23};
         // return {mint_t(p).pow(u), ord};
     }();  // {(primitive root).pow(u), log2(ord)} (Modulus = u * 2^ord + 1)
     const int na = static_cast<int>(a.size());
@@ -24,8 +29,10 @@ std::vector<ModInt<Modulus>> ntt_convolution(const std::vector<T>& a, const std:
     }
     const mint_t gu = mod_info.first.pow(1ll << (mod_info.second - deg));
     std::vector<mint_t> ca(sz), cb(sz);
-    for (int i = 0; i < na; i++) ca[i] = a[i];
-    for (int i = 0; i < nb; i++) cb[i] = b[i];
+    for (int i = 0; i < na; i++)
+        ca[i] = a[i];
+    for (int i = 0; i < nb; i++)
+        cb[i] = b[i];
     auto dft = [g = gu, d = deg](std::vector<mint_t>& vec, bool inverse = false) noexcept -> void {
         mint_t gbase = (inverse ? g.inv() : g);
         mint_t gbase_k, w1, w2;
@@ -58,9 +65,11 @@ std::vector<ModInt<Modulus>> ntt_convolution(const std::vector<T>& a, const std:
         }
     };
     dft(ca), dft(cb);
-    for (int i = 0; i < sz; i++) ca[i] *= cb[i];
+    for (int i = 0; i < sz; i++)
+        ca[i] *= cb[i];
     dft(ca, true);
     const mint_t sz_inv = mint_t(sz).inv();
-    for (int i = 0; i < sz; i++) ca[i] *= sz_inv;
+    for (int i = 0; i < sz; i++)
+        ca[i] *= sz_inv;
     return ca;
 }

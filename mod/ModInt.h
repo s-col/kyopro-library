@@ -16,7 +16,9 @@ public:
             m_value += Modulus;
     }
 
-    constexpr i64 const& value() const noexcept { return m_value; }
+    constexpr i64 const& value() const noexcept {
+        return m_value;
+    }
 
     constexpr ModInt& operator+=(const ModInt rhs) noexcept {
         m_value += rhs.m_value;
@@ -97,8 +99,12 @@ public:
         return res;
     }
 
-    friend constexpr ModInt operator+(const ModInt& a) noexcept { return a; }
-    friend constexpr ModInt operator-(const ModInt& a) noexcept { return ModInt(0) - a; }
+    friend constexpr ModInt operator+(const ModInt& a) noexcept {
+        return a;
+    }
+    friend constexpr ModInt operator-(const ModInt& a) noexcept {
+        return ModInt(0) - a;
+    }
     friend constexpr ModInt operator+(const ModInt& lhs, const ModInt& rhs) noexcept {
         return ModInt<Modulus>(lhs) += rhs;
     }

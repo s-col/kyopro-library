@@ -20,13 +20,15 @@ public:
         init(g, root);
     }
     int lca(int u, int v) const {
-        if (dep[u] > dep[v]) std::swap(u, v);
+        if (dep[u] > dep[v])
+            std::swap(u, v);
         for (int k = 0; k < ub; k++) {
             if ((dep[v] - dep[u]) >> k & 1) {
                 v = par[k][v];
             }
         }
-        if (u == v) return u;
+        if (u == v)
+            return u;
         for (int k = ub - 1; k >= 0; k--) {
             if (par[k][u] != par[k][v]) {
                 u = par[k][u];
@@ -35,16 +37,23 @@ public:
         }
         return par[0][u];
     }
-    int parent(int idx, int d) const { return par[d][idx]; }
-    int depth(int idx) const { return dep[idx]; }
-    int dist(int u, int v) const { return dep[u] + dep[v] - dep[lca(u, v)] * 2; }
+    int parent(int idx, int d) const {
+        return par[d][idx];
+    }
+    int depth(int idx) const {
+        return dep[idx];
+    }
+    int dist(int u, int v) const {
+        return dep[u] + dep[v] - dep[lca(u, v)] * 2;
+    }
 
 private:
     void init(const Graph& g, int root) {
         n = static_cast<int>(g.size());
         root = root;
         ub = 1;
-        while (n >> ub) ++ub;
+        while (n >> ub)
+            ++ub;
         par.assign(ub, std::vector<int>(n, -1));
         dep.assign(n, -1);
         dfs(g, root, -1, 0);
@@ -59,7 +68,8 @@ private:
         par[0][v] = p;
         dep[v] = d;
         for (const auto& to : g[v]) {
-            if (to != p) dfs(g, to, v, d + 1);
+            if (to != p)
+                dfs(g, to, v, d + 1);
         }
     }
 };

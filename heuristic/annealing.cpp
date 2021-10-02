@@ -13,8 +13,8 @@ void solve_annealing() {
     int64_t count = 0, update_count = 0;
     while (true) {
         /*
-             *- code -* 
-        */
+         *- code -*
+         */
         ++count;
         ++i_time;
         if (i_time == n_time) {

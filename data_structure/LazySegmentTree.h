@@ -31,29 +31,25 @@ private:
     int sz;
 
 public:
-    explicit LazySegmentTree(
-        int n, F f, G g, H h, P p, T tid, E eid) noexcept
+    explicit LazySegmentTree(int n, F f, G g, H h, P p, T tid, E eid) noexcept
         : n(n), f(f), g(g), h(h), p(p), tid(tid), eid(eid) {
         sz = 1;
-        while (sz < n) sz <<= 1;
+        while (sz < n)
+            sz <<= 1;
         vec.assign(sz * 2, tid);
         lazy.assign(sz * 2, eid);
     }
-    explicit LazySegmentTree(
-        const std::vector<T>& vec, F f, G g, H h, P p, T tid, E eid) noexcept
+    explicit LazySegmentTree(const std::vector<T>& vec, F f, G g, H h, P p, T tid, E eid) noexcept
         : n(vec.size()), f(f), g(g), h(h), p(p), tid(tid), eid(eid) {
         sz = 1;
-        while (sz < n) sz <<= 1;
+        while (sz < n)
+            sz <<= 1;
         this->vec.assign(sz * 2, tid);
         lazy.assign(sz * 2, eid);
         set_array(vec);
     }
-    T& operator[](int idx) noexcept {
-        return vec[sz + idx];
-    }
-    void set_value(int idx, T val) noexcept {
-        vec[sz + idx] = val;
-    }
+    T& operator[](int idx) noexcept { return vec[sz + idx]; }
+    void set_value(int idx, T val) noexcept { vec[sz + idx] = val; }
     template <class RandomIt>
     void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
@@ -67,15 +63,9 @@ public:
             vec[i] = f(vec[i << 1], vec[(i << 1) | 1]);
         }
     }
-    void update(int a, int b, E x) noexcept {
-        _update(a, b, x, 1, 0, sz);
-    }
-    T query(int a, int b) noexcept {
-        return _query(a, b, 1, 0, sz);
-    }
-    T query_all() noexcept {
-        return query(0, sz);
-    }
+    void update(int a, int b, E x) noexcept { _update(a, b, x, 1, 0, sz); }
+    T query(int a, int b) noexcept { return _query(a, b, 1, 0, sz); }
+    T query_all() noexcept { return query(0, sz); }
     // Return the largest x such that check(A[idx] op ... op A[x - 1]) == true
     // complexity: O(log (n))
     template <class C>
@@ -93,7 +83,8 @@ public:
 
 private:
     void eval(int k, int l, int r) noexcept {
-        if (lazy[k] == eid) return;
+        if (lazy[k] == eid)
+            return;
         if (r - l > 1) {
             lazy[k << 1] = h(lazy[k << 1], lazy[k]);
             lazy[(k << 1) | 1] = h(lazy[(k << 1) | 1], lazy[k]);
@@ -103,7 +94,8 @@ private:
     }
     T _update(int a, int b, E x, int k, int l, int r) noexcept {
         eval(k, l, r);
-        if (b <= l || r <= a) return vec[k];
+        if (b <= l || r <= a)
+            return vec[k];
         if (a <= l && r <= b) {
             lazy[k] = h(lazy[k], x);
             return g(vec[k], p(lazy[k], r - l));
@@ -114,7 +106,8 @@ private:
         }
     }
     T _query(int a, int b, int k, int l, int r) noexcept {
-        if (b <= l || r <= a) return tid;
+        if (b <= l || r <= a)
+            return tid;
         eval(k, l, r);
         if (a <= l && r <= b) {
             return vec[k];
@@ -132,7 +125,8 @@ private:
             return check(acc) ? n : k - sz;
         }
         const int mid = (l + r) >> 1;
-        if (mid <= idx) return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
+        if (mid <= idx)
+            return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
         if (idx <= l) {
             const T tmp = f(acc, vec[k]);
             if (check(tmp)) {
@@ -141,18 +135,20 @@ private:
             }
         }
         const int vl = _max_right(idx, check, acc, k << 1, l, mid);
-        if (vl < n) return vl;
+        if (vl < n)
+            return vl;
         return _max_right(idx, check, acc, (k << 1) | 1, mid, r);
     }
     template <class C>
-    int _min_left(int idx, const C& check, T& acc, int k, int l, int r) const noexcept {
+    int _min_left(int idx, const C& check, T& acc, int k, int l, int r) noexcept {
         eval(k, l, r);
         if (l + 1 == r) {
             acc = f(acc, vec[k]);
             return check(acc) ? 0 : k - sz + 1;
         }
         const int mid = (l + r) >> 1;
-        if (mid >= idx) return _min_left(idx, check, acc, k << 1, l, mid);
+        if (mid >= idx)
+            return _min_left(idx, check, acc, k << 1, l, mid);
         if (idx >= r) {
             const T tmp = f(acc, vec[k]);
             if (check(tmp)) {
@@ -161,7 +157,8 @@ private:
             }
         }
         const int vr = _min_left(idx, check, acc, (k << 1) | 1, mid, r);
-        if (vr > 0) return vr;
+        if (vr > 0)
+            return vr;
         return _min_left(idx, check, acc, k << 1, l, mid);
     }
 };

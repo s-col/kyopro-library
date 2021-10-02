@@ -15,6 +15,9 @@ public:
         std::sort(pos.begin(), pos.end());
         pos.erase(std::unique(pos.begin(), pos.end()), pos.end());
     }
+    const T& val(size_t idx) const noexcept {
+        return pos[idx];
+    }
     size_t lower_bound(const T& key) const noexcept {
         return std::lower_bound(pos.begin(), pos.end(), key) - pos.begin();
     }

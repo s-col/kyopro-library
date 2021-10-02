@@ -10,8 +10,10 @@ private:
 
 public:
     constexpr ModInt(const i64 x = 0) noexcept : m_value(x) {
-        if (m_value < -Modulus || m_value >= Modulus) m_value %= Modulus;
-        if (m_value < 0) m_value += Modulus;
+        if (m_value < -Modulus || m_value >= Modulus)
+            m_value %= Modulus;
+        if (m_value < 0)
+            m_value += Modulus;
     }
 
     constexpr i64 const& value() const noexcept { return m_value; }
@@ -32,7 +34,8 @@ public:
     }
     constexpr ModInt& operator*=(const ModInt rhs) noexcept {
         m_value *= rhs.m_value;
-        if (m_value >= Modulus) m_value %= Modulus;
+        if (m_value >= Modulus)
+            m_value %= Modulus;
         return *this;
     }
     constexpr ModInt& operator/=(ModInt rhs) noexcept {
@@ -70,8 +73,10 @@ public:
             u -= t * v;
             tmp = u, u = v, v = tmp;
         }
-        if (u < -Modulus || u >= Modulus) u %= Modulus;
-        if (u < 0) u += Modulus;
+        if (u < -Modulus || u >= Modulus)
+            u %= Modulus;
+        if (u < 0)
+            u += Modulus;
         return u;
     }
 
@@ -85,18 +90,15 @@ public:
             tmp = *this;
         }
         for (; k > 0; k >>= 1) {
-            if (k & 1) res *= tmp;
+            if (k & 1)
+                res *= tmp;
             tmp *= tmp;
         }
         return res;
     }
 
-    friend constexpr ModInt operator+(const ModInt& a) noexcept {
-        return a;
-    }
-    friend constexpr ModInt operator-(const ModInt& a) noexcept {
-        return ModInt(0) - a;
-    }
+    friend constexpr ModInt operator+(const ModInt& a) noexcept { return a; }
+    friend constexpr ModInt operator-(const ModInt& a) noexcept { return ModInt(0) - a; }
     friend constexpr ModInt operator+(const ModInt& lhs, const ModInt& rhs) noexcept {
         return ModInt<Modulus>(lhs) += rhs;
     }
@@ -143,4 +145,5 @@ public:
 };
 
 constexpr long long MOD = 1000000007;
+// constexpr long long MOD = 998244353;
 using Mint = ModInt<MOD>;

@@ -51,7 +51,7 @@ public:
         fr.clear();
         ba.clear();
     }
-    size_t size(void) noexcept {
+    size_t size(void) const noexcept {
         return fr.size() + ba.size();
     }
 };

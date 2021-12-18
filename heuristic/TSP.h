@@ -23,8 +23,11 @@ struct XorShift {
     }
 };
 
+
+
+// NOTE: 有向グラフには非対応
 template <class T>
-class TSP {
+class ClosedLoopTSP {
 private:
     std::vector<int> sol, vers;
     T sol_cost;
@@ -35,7 +38,7 @@ private:
     static constexpr int TH_EXACTLY = 18;
 
 public:
-    explicit TSP(int n, const std::vector<std::vector<T>>& dist) : DIST(dist), N(n) {
+    explicit ClosedLoopTSP(int n, const std::vector<std::vector<T>>& dist) : DIST(dist), N(n) {
         sol.resize(N);
         iota(sol.begin(), sol.end(), 0);
         vers.resize(N);
@@ -129,7 +132,7 @@ private:
     std::array<int, 4> choose_4() {
         std::array<int, 4> res;
         for (int i = 0; i < 4; i++) {
-            int j = random.randint(i, N - 1);
+            int j = random.randint(i, N);
             std::swap(vers[i], vers[j]);
             res[i] = vers[i];
         }
@@ -190,6 +193,213 @@ private:
             res += DIST[sol[i]][sol[i + 1]];
         }
         res += DIST[sol[N - 1]][sol[0]];
+        return res;
+    }
+};
+
+
+
+// NOTE: 有向グラフには非対応
+template <class T>
+class OpenLoopTSP {
+private:
+    std::vector<int> sol, vers;
+    T sol_cost;
+    const std::vector<std::vector<T>> DIST;
+    const int N;
+    XorShift random;
+    static constexpr T INF = std::numeric_limits<T>::max();
+    static constexpr int TH_EXACTLY = 18;
+
+public:
+    explicit OpenLoopTSP(int n, const std::vector<std::vector<T>>& dist) : DIST(dist), N(n) {
+        sol.resize(N);
+        iota(sol.begin(), sol.end(), 0);
+        vers.resize(N - 1);
+        iota(vers.begin(), vers.end(), 0);
+    }
+
+    const std::vector<int>& get_sol() const noexcept {
+        return sol;
+    }
+    T get_cost() const noexcept {
+        return sol_cost;
+    }
+
+    void solve_exactly(int start = -1) {
+        std::vector dp(1u << N, std::vector<T>(N, INF));
+        std::vector pre(1u << N, std::vector<int>(N, -1));
+        if (start == -1) {
+            for (int i = 0; i < N; i++) {
+                dp[1u << i][i] = 0;
+            }
+        } else {
+            dp[1u << start][start] = 0;
+        }
+        for (uint32_t mask = 0; mask < 1u << N; mask++) {
+            for (int i = 0; i < N; i++) {
+                if (~mask >> i & 1)
+                    continue;
+                for (int j = 0; j < N; j++) {
+                    if (i == j)
+                        continue;
+                    uint32_t pre_mask = mask & ~(1u << i);
+                    T pre_cost = dp[pre_mask][j];
+                    if (pre_cost == INF)
+                        continue;
+                    if (dp[mask][i] > pre_cost + DIST[j][i]) {
+                        dp[mask][i] = pre_cost + DIST[j][i];
+                        pre[mask][i] = j;
+                    }
+                }
+            }
+        }
+        {
+            uint32_t mask = (1u << N) - 1;
+            T mn_cost = INF;
+            int cur = -1;
+            for (int i = 0; i < N; i++) {
+                if (mn_cost > dp[mask][i]) {
+                    mn_cost = dp[mask][i];
+                    cur = i;
+                }
+            }
+            for (int i = N - 1; i >= 0; i--) {
+                sol[i] = cur;
+                uint32_t next_mask = mask & ~(1u << cur);
+                cur = pre[mask][cur];
+                mask = next_mask;
+            }
+            sol_cost = mn_cost;
+        }
+    }
+
+    // arguments:
+    //   time_limit: [ms]
+    void solve_heuristic(int time_limit, int start = -1) {
+        const auto t_start = std::chrono::system_clock::now();
+        const auto time_limit_chrono = std::chrono::milliseconds(time_limit);
+        if (start != -1) {
+            for (int i = 0; i < N; i++) {
+                if (sol[i] == start) {
+                    std::swap(sol[0], sol[i]);
+                }
+            }
+        }
+        T cost = calc_cost();
+        while (std::chrono::system_clock::now() - t_start < time_limit_chrono) {
+            auto pre = sol;
+            T diff = double_bridge();
+            while (true) {
+                bool update = false;
+                for (int i = 0; i < N; i++) {
+                    if (i == 0 && start != -1) {
+                        // Avoid from changing first vertice when start != -1.
+                        continue;
+                    }
+                    for (int j = i + 1; j < N; j++) {
+                        T d = calc_diff_two_opt(i, j);
+                        if (d < 0) {
+                            update = true;
+                            apply_two_opt(i, j);
+                            diff += d;
+                        }
+                    }
+                }
+                if (!update) {
+                    break;
+                }
+            }
+            if (diff < 0) {
+                cost += diff;
+            } else {
+                sol = std::move(pre);
+            }
+        }
+        sol_cost = cost;
+    }
+    // arguments:
+    //   timei_limit: [ms]
+    void solve(int time_limit, int start = -1) {
+        if (N <= TH_EXACTLY) {
+            solve_exactly(start);
+        } else {
+            solve_heuristic(time_limit, start);
+        }
+    }
+
+private:
+    std::array<int, 4> choose_4() {
+        std::array<int, 4> res;
+        for (int i = 0; i < 4; i++) {
+            int j = random.randint(i, N - 1);
+            std::swap(vers[i], vers[j]);
+            res[i] = vers[i];
+        }
+        return res;
+    }
+
+    T calc_diff_two_opt(int i, int j) const {
+        if (i > j)
+            std::swap(i, j);
+        if (i == 0 && j == N - 1) {
+            return T(0);
+        }
+        int ii = i - 1, jj = j + 1;
+        if (ii < 0)
+            ii = N - 1;
+        if (jj == N)
+            jj = 0;
+        T res = T(0);
+        if (i == 0) {
+            res += DIST[sol[i]][sol[jj]];
+            res -= DIST[sol[j]][sol[jj]];
+        } else if (j == N - 1) {
+            res += DIST[sol[ii]][sol[j]];
+            res -= DIST[sol[ii]][sol[i]];
+        } else {
+            res += DIST[sol[ii]][sol[j]] + DIST[sol[i]][sol[jj]];
+            res -= DIST[sol[ii]][sol[i]] + DIST[sol[j]][sol[jj]];
+        }
+        return res;
+    }
+
+    void apply_two_opt(int i, int j) {
+        if (i > j)
+            std::swap(i, j);
+        std::reverse(sol.begin() + i, sol.begin() + j + 1);
+    }
+
+    T double_bridge() {
+        auto chosen = choose_4();
+        std::sort(chosen.begin(), chosen.end());
+        const auto [x0, x1, x2, x3] = chosen;
+        int y0 = x0 + 1, y1 = x1 + 1, y2 = x2 + 1, y3 = x3 + 1;
+        if (y3 == N)
+            y3 = 0;
+        T res = T(0);
+        res += DIST[sol[x0]][sol[y2]] + DIST[sol[x1]][sol[y3]] + DIST[sol[x2]][sol[y0]] +
+               DIST[sol[x3]][sol[y1]];
+        res -= DIST[sol[x0]][sol[y0]] + DIST[sol[x1]][sol[y1]] + DIST[sol[x2]][sol[y2]] +
+               DIST[sol[x3]][sol[y3]];
+        std::vector<int> sol_tmp(N);
+        if (y3 == 0)
+            y3 = N;
+        auto itr = sol_tmp.begin();
+        itr = std::copy(sol.begin(), sol.begin() + x0 + 1, itr);
+        itr = std::copy(sol.begin() + y2, sol.begin() + x3 + 1, itr);
+        itr = std::copy(sol.begin() + y1, sol.begin() + x2 + 1, itr);
+        itr = std::copy(sol.begin() + y0, sol.begin() + x1 + 1, itr);
+        itr = std::copy(sol.begin() + y3, sol.end(), itr);
+        std::swap(sol, sol_tmp);
+        return res;
+    }
+
+    T calc_cost() const {
+        T res = T(0);
+        for (int i = 0; i + 1 < N; i++) {
+            res += DIST[sol[i]][sol[i + 1]];
+        }
         return res;
     }
 };

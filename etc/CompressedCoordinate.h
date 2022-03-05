@@ -30,4 +30,10 @@ public:
     size_t size() const noexcept {
         return pos.size();
     }
+    bool include(const T& key) const noexcept {
+        return std::binary_search(pos.begin(), pos.end(), key);
+    }
+    const std::vector<T>& all() const noexcept {
+        return pos;
+    }
 };

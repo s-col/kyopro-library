@@ -99,6 +99,36 @@ public:
         return res;
     }
 
+    // 有理数 mod を通常の有理数に復元する
+    // 分母分子が共に MOD の平方根以下であれば成功する。
+    // @return (分子, 分母)
+    constexpr std::pair<int64_t, int64_t> to_fraction() const noexcept {
+        if (m_value == 0) {
+            return {0, 1};
+        }
+        int64_t x = 1, y = 0, u = 0, v = 1, s = m_value, t = Modulus;
+        int64_t k = 0, tmp = 0;
+        while (t) {
+            k = s / t, s -= k * t;
+            tmp = s, s = t, t = tmp;
+            x -= k * u;
+            tmp = x, x = u, u = tmp;
+            y -= k * v;
+            tmp = y, y = v, v = tmp;
+            if (s * s <= Modulus && x * x <= Modulus) {
+                if (x < 0)
+                    s = -s, x = -x;
+                return {s, x};
+            }
+        }
+        return {-1, -1};
+    }
+
+    constexpr std::string to_fraction_str() const noexcept {
+        auto [n, d] = to_fraction();
+        return std::to_string(n) + '/' + std::to_string(d);
+    }
+
     friend constexpr ModInt operator+(const ModInt& a) noexcept {
         return a;
     }
@@ -150,6 +180,6 @@ public:
     }
 };
 
-constexpr long long MOD = 1000000007;
-// constexpr long long MOD = 998244353;
+// constexpr long long MOD = 1000000007;
+constexpr long long MOD = 998244353;
 using Mint = ModInt<MOD>;

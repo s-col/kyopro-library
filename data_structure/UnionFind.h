@@ -16,15 +16,17 @@ public:
     bool same(int x, int y) {
         return root(x) == root(y);
     }
-    void unite(int x, int y) {
+    // @return x, y をマージ後の集合の代表元
+    int unite(int x, int y) {
         x = root(x);
         y = root(y);
         if (x == y)
-            return;
+            return x;
         if (sz[x] < sz[y])
             std::swap(x, y);
         par[y] = x;
         sz[x] += sz[y];
+        return x;
     }
     int size(int x) {
         return sz[root(x)];

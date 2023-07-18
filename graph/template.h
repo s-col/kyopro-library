@@ -21,3 +21,5 @@ struct WeightEdgeGreater {
 };
 template <typename T>
 using WeightedGraph = std::vector<std::vector<WeightedEdge<T>>>;
+
+using Graph = std::vector<std::vector<int>>;

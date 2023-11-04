@@ -7,26 +7,37 @@
 // return:
 //     g が二部グラフなら片方のグループの頂点数
 //     g が二部グラフでないなら -1
+// verified: https://atcoder.jp/contests/abc327/submissions/47279144
 int is_bipartite(const Graph& g) {
     const int n = static_cast<int>(g.size());
     std::vector<int> colors(n);
     int white_cnt = 0;
-    std::stack<std::pair<int, int>> st;
-    st.emplace(0, 1);
-    while (!st.empty()) {
-        auto [v, color] = st.top();
-        st.pop();
-        if (color == 1)
+
+    auto dfs = [&](auto&& self, int u, int color) -> bool {
+        colors[u] = color;
+        if (color == 1) {
             ++white_cnt;
-        colors[v] = color;
-        for (const auto& to : g[v]) {
+        }
+        for (const auto& to : g[u]) {
             if (colors[to] == color) {
-                return -1;
+                return false;
             }
             if (colors[to] == 0) {
-                st.emplace(to, -color);
+                if (!self(self, to, -color)) {
+                    return false;
+                }
             }
         }
+        return true;
+    };
+
+    for (int u = 0; u < n; u++) {
+        if (colors[u] != 0)
+            continue;
+        if (!dfs(dfs, u, 1)) {
+            return -1;
+        }
     }
+
     return white_cnt;
 }

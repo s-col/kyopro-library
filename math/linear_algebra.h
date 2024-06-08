@@ -9,6 +9,13 @@ protected:
     std::valarray<T> mat;
 
 public:
+    static Matrix eye(int sz, const T& id = T(1)) noexcept {
+        Matrix mat(sz, sz);
+        for (int i = 0; i < sz; i++) {
+            mat(i, i) = id;
+        }
+        return mat;
+    };
     Matrix() noexcept : H(0), W(0) {}
     Matrix(int H, int W = 1, T a = T(0)) noexcept : H(H), W(W), mat(a, H * W) {}
     Matrix(std::initializer_list<T> list) noexcept : H(list.size()), W(1), mat(list) {}
@@ -60,6 +67,17 @@ public:
         *this = *this * r;
         return *this;
     }
+    Matrix pow(int64_t n) const noexcept {
+        assert(n >= 0 && H == W);
+        Matrix a = *this;
+        Matrix res = Matrix::eye(H);
+        for (; n > 0; n >>= 1) {
+            if (n & 1)
+                res *= a;
+            a *= a;
+        }
+        return res;
+    };
     friend Matrix operator+(const Matrix& l, const Matrix& r) noexcept {
         return Matrix(l) += r;
     }
@@ -160,8 +178,7 @@ std::optional<Matrix<T>> solve_leq(const Matrix<T>& A, const Matrix<T>& b, T eps
 // solve a linear equation: Ax = b, by Gaussian elimination
 // specialization for ModInt
 template <int_fast64_t MOD>
-std::optional<Matrix<ModInt<MOD>>> solve_leq(const Matrix<ModInt<MOD>>& A,
-                                             const Matrix<ModInt<MOD>>& b) {
+std::optional<Matrix<ModInt<MOD>>> solve_leq(const Matrix<ModInt<MOD>>& A, const Matrix<ModInt<MOD>>& b) {
     assert(A.row() == b.row() && b.col() == 1);
     auto [H, W] = A.size();
     Matrix<ModInt<MOD>> mat(H, W + 1);  // extended matrix

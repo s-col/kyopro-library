@@ -58,7 +58,7 @@ public:
      *
      * The i-th vertex of the contracted graph corresponds to the i-th component in the strongly connected components.
      *
-     * Time complexity: O(V + E log E)
+     * Time complexity: O(V + E)
      */
     std::pair<Graph, std::vector<std::vector<int>>> contracted_graph() const noexcept {
         const auto vg = scc();
@@ -70,17 +70,16 @@ public:
             }
         }
         Graph contracted_graph(num_components);
-        for (int fr = 0; fr < n; fr++) {
-            const int fr_comp = comp_index[fr];
-            for (const auto& to : g[fr]) {
-                const int to_comp = comp_index[to];
+        for (int to = 0; to < n; to++) {
+            const int to_comp = comp_index[to];
+            for (const auto& fr : rg[to]) {
+                const int fr_comp = comp_index[fr];
                 if (fr_comp != to_comp) {
                     contracted_graph[fr_comp].emplace_back(to_comp);
                 }
             }
         }
         for (int i = 0; i < num_components; i++) {
-            sort(contracted_graph[i].begin(), contracted_graph[i].end());
             contracted_graph[i].erase(unique(contracted_graph[i].begin(), contracted_graph[i].end()), contracted_graph[i].end());
         }
         return {contracted_graph, vg};

@@ -4,8 +4,9 @@
 // 計算量: O(|E| + |V|)
 class SccGraph {
 private:
+    using Graph = std::vector<std::vector<int>>;
     int n;
-    std::vector<std::vector<int>> g, rg;
+    Graph g, rg;
 
 public:
     SccGraph(int n) : n(n), g(n), rg(n) {}
@@ -13,7 +14,12 @@ public:
         g[a].emplace_back(b);
         rg[b].emplace_back(a);
     }
-    std::vector<std::vector<int>> scc() {
+    /**
+     * Return strongly connected components in topological order.
+     *
+     * Time complexity: O(V + E)
+     */
+    std::vector<std::vector<int>> scc() const noexcept {
         std::vector<std::vector<int>> res;
         std::vector<int> vs;
         vs.reserve(n);
@@ -44,5 +50,39 @@ public:
             }
         }
         return res;
+    }
+    /**
+     * Returns a pair with the following components:
+     *   - first: the contracted graph
+     *   - second: the strongly connected components in topological order
+     *
+     * The i-th vertex of the contracted graph corresponds to the i-th component in the strongly connected components.
+     *
+     * Time complexity: O(V + E log E)
+     */
+    std::pair<Graph, std::vector<std::vector<int>>> contracted_graph() const noexcept {
+        const auto vg = scc();
+        std::vector<int> comp_index(n);
+        const int num_components = vg.size();
+        for (int i_comp = 0; i_comp < num_components; i_comp++) {
+            for (const auto& u : vg[i_comp]) {
+                comp_index[u] = i_comp;
+            }
+        }
+        Graph contracted_graph(num_components);
+        for (int fr = 0; fr < n; fr++) {
+            const int fr_comp = comp_index[fr];
+            for (const auto& to : g[fr]) {
+                const int to_comp = comp_index[to];
+                if (fr_comp != to_comp) {
+                    contracted_graph[fr_comp].emplace_back(to_comp);
+                }
+            }
+        }
+        for (int i = 0; i < num_components; i++) {
+            sort(contracted_graph[i].begin(), contracted_graph[i].end());
+            contracted_graph[i].erase(unique(contracted_graph[i].begin(), contracted_graph[i].end()), contracted_graph[i].end());
+        }
+        return {contracted_graph, vg};
     }
 };

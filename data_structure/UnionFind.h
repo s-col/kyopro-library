@@ -22,16 +22,18 @@ public:
     }
     /**
      * @brief Find the representative of x.
-     * @complexity Amortized O(alpha(N))
      * @param x Element index.
      * @return Root index of x.
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     int root(int x) {
         return par[x] == x ? x : par[x] = root(par[x]);
     }
     /**
      * @brief Test whether x and y belong to the same set.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     bool same(int x, int y) {
         return root(x) == root(y);
@@ -42,7 +44,8 @@ public:
      * @param x First element index.
      * @param y Second element index.
      * @return The representative of the merged set.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     int unite(int x, int y) {
         x = root(x);

@@ -36,7 +36,8 @@ public:
      *
      * @param x Index of the element.
      * @return Root index of the set containing x.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     int root(int x) {
         if (par[x] == x) {
@@ -53,7 +54,8 @@ public:
      * @param x First node index.
      * @param y Second node index.
      * @return true if x and y belong to the same set.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     bool same(int x, int y) {
         return root(x) == root(y);
@@ -64,7 +66,8 @@ public:
      *
      * @param x Node index.
      * @return Potential value of x relative to its root.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     T weight(int x) {
         root(x);
@@ -77,7 +80,8 @@ public:
      * @param x Base node.
      * @param y Target node.
      * @return Difference weight(y) - weight(x).
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     T diff(int x, int y) {
         return weight(y) - weight(x);
@@ -91,7 +95,8 @@ public:
      * @param x First node index.
      * @param y Second node index.
      * @param w Value to satisfy weight(y) = weight(x) + w.
-     * @complexity Amortized O(alpha(N))
+     *
+     * Time complexity: amortized \f$O(\alpha(N))\f$.
      */
     void unite(int x, int y, T w) {
         w += weight(x), w -= weight(y);

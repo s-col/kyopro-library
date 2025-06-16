@@ -9,7 +9,8 @@
  * @param a Base value.
  * @param n Non-negative exponent.
  * @return a raised to the n-th power.
- * @complexity O(log n)
+ *
+ * Time complexity: \f$O(\log n)\f$.
  */
 template <typename T>
 T bpow(T a, int64_t n) {

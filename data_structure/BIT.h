@@ -27,7 +27,8 @@ public:
      *
      * @param i 0-based index to update.
      * @param a Value to add.
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     void add(int i, const T& a) {
         for (++i; i <= n; i += i & (-i)) {
@@ -40,7 +41,8 @@ public:
      *
      * @param i Exclusive end index.
      * @return Sum of elements in [0, i).
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     T query(int i) const {
         T res = 0;
@@ -56,7 +58,8 @@ public:
      * @param i Left inclusive index.
      * @param j Right exclusive index.
      * @return Sum of elements in [i, j).
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     T query(int i, int j) const {
         return query(j) - query(i);

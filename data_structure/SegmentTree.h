@@ -83,7 +83,7 @@ public:
     /**
      * @brief Build the tree from current leaves.
      *
-     * @complexity O(N)
+     * Time complexity: \f$O(N)\f$.
      */
     void build() noexcept {
         for (int i = sz - 1; i > 0; i--) {
@@ -95,7 +95,8 @@ public:
      *
      * @param idx Index to update.
      * @param val New value.
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     void update(int idx, T val) noexcept {
         idx += sz;
@@ -110,7 +111,8 @@ public:
      * @param l Left index (inclusive).
      * @param r Right index (exclusive).
      * @return Aggregated value on the range.
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     T query(int l, int r) const noexcept {
         T l_val = id, r_val = id;
@@ -136,7 +138,8 @@ public:
      * @param idx Starting index.
      * @param check Monotone predicate on prefix aggregate.
      * @return Largest position x (<= n).
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     template <class F>
     int max_right(int idx, const F& check) const noexcept {
@@ -151,7 +154,8 @@ public:
      * @param idx Ending index.
      * @param check Monotone predicate on suffix aggregate.
      * @return Smallest position x (>= 0).
-     * @complexity O(log N)
+     *
+     * Time complexity: \f$O(\log N)\f$.
      */
     template <class F>
     int min_left(int idx, const F& check) const noexcept {

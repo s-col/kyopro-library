@@ -12,7 +12,8 @@
  * @param dist Output array storing distances from s.
  * @param g Weighted graph adjacency list.
  * @param s Source vertex index.
- * @complexity O((E+V) log V)
+ *
+ * Time complexity: \f$O((E+V) \log V)\f$.
  */
 template <typename T>
 void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
@@ -46,7 +47,8 @@ void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
  * @param prev Output parent array: prev[v] is the predecessor of v.
  * @param g Weighted graph adjacency list.
  * @param s Source vertex index.
- * @complexity O((E+V) log V)
+ *
+ * Time complexity: \f$O((E+V) \log V)\f$.
  */
 template <typename T>
 void dijkstra(std::vector<T>& dist, std::vector<int>& prev,

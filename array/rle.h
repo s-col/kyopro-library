@@ -8,7 +8,8 @@
  * @tparam V Container type supporting operator[] and size().
  * @param a Input sequence.
  * @return Vector of {value, length} pairs.
- * @complexity O(N)
+ *
+ * Time complexity: \f$O(N)\f$.
  */
 template <class V>
 std::vector<std::pair<typename V::value_type, int>> rle(const V& a) {

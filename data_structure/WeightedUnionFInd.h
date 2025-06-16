@@ -1,5 +1,14 @@
 #include <bits/stdc++.h>
 
+/**
+ * @brief Weighted Union-Find structure.
+ *
+ * Disjoint-set data structure that also stores potential differences
+ * between nodes. Typical operations such as union and find work in
+ * amortized \f$\alpha(N)\f$ time.
+ *
+ * @tparam T Type of the potential (weight).
+ */
 template <typename T>
 class WeightedUnionFind {
 private:
@@ -9,10 +18,26 @@ private:
     const T id;
 
 public:
+    /**
+     * @brief Construct a new WeightedUnionFind instance.
+     *
+     * @param N Number of elements.
+     * @param id Identity element for potential values.
+     */
     WeightedUnionFind(int N, T id) : par(N), sz(N, 1), potential(N, id), id(id) {
         for (int i = 0; i < N; ++i)
             par[i] = i;
     }
+
+    /**
+     * @brief Find the representative of x.
+     *
+     * Path compression is used to keep the complexity nearly constant.
+     *
+     * @param x Index of the element.
+     * @return Root index of the set containing x.
+     * @complexity Amortized O(alpha(N))
+     */
     int root(int x) {
         if (par[x] == x) {
             return x;
@@ -22,18 +47,52 @@ public:
             return par[x] = rt;
         }
     }
+    /**
+     * @brief Check whether two nodes are in the same set.
+     *
+     * @param x First node index.
+     * @param y Second node index.
+     * @return true if x and y belong to the same set.
+     * @complexity Amortized O(alpha(N))
+     */
     bool same(int x, int y) {
         return root(x) == root(y);
     }
+
+    /**
+     * @brief Get the potential of node x.
+     *
+     * @param x Node index.
+     * @return Potential value of x relative to its root.
+     * @complexity Amortized O(alpha(N))
+     */
     T weight(int x) {
         root(x);
         return potential[x];
     }
-    // Return weight(y) - weight(x)
+
+    /**
+     * @brief Compute weight(y) - weight(x).
+     *
+     * @param x Base node.
+     * @param y Target node.
+     * @return Difference weight(y) - weight(x).
+     * @complexity Amortized O(alpha(N))
+     */
     T diff(int x, int y) {
         return weight(y) - weight(x);
     }
-    // The weight is set to satisfy weight(y) = weight(x) + w;
+
+    /**
+     * @brief Unite two nodes with a given potential difference.
+     *
+     * After union, the invariant weight(y) = weight(x) + w holds.
+     *
+     * @param x First node index.
+     * @param y Second node index.
+     * @param w Value to satisfy weight(y) = weight(x) + w.
+     * @complexity Amortized O(alpha(N))
+     */
     void unite(int x, int y, T w) {
         w += weight(x), w -= weight(y);
         x = root(x), y = root(y);
@@ -45,9 +104,21 @@ public:
         sz[x] += sz[y];
         potential[y] = w;
     }
+    /**
+     * @brief Size of the set containing x.
+     *
+     * @param x Node index.
+     * @return Number of nodes in the set of x.
+     */
     int size(int x) {
         return sz[root(x)];
     }
+
+    /**
+     * @brief Reset the structure with N elements.
+     *
+     * @param N Number of new elements.
+     */
     void reset(int N) {
         par.resize(N);
         for (int i = 0; i < N; ++i)

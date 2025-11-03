@@ -1,13 +1,14 @@
 #include <bits/stdc++.h>
 
-// セグメント木 SegmentTree<T, Op>
-//     T: 配列の要素の型, Op: 二項演算関数の型
-// arguments:
-//     n: 要素数, op: 二項演算, id: 単位元
-// query は右半開区間
-// 時間計算量：
-//     構築: O(N)
-//     クエリ, 更新: O(log N)
+/**
+ * @brief Segment tree supporting range queries and point updates.
+ *
+ * Both build and query/update operations run in \f$O(\log N)\f$ time.
+ * The query operates on right half-open intervals.
+ *
+ * @tparam T  Type of each element.
+ * @tparam Op Binary operation type.
+ */
 template <class T, class Op>
 class SegmentTree {
 private:
@@ -18,12 +19,26 @@ private:
     int sz;
 
 public:
+    /**
+     * @brief Construct a segment tree with given size.
+     *
+     * @param n  Number of elements.
+     * @param op Binary operation.
+     * @param id Identity element of op.
+     */
     explicit SegmentTree(int n, Op op, T id) noexcept : n(n), op(op), id(id) {
         sz = 1;
         while (sz < n)
             sz <<= 1;
         vec.assign(sz << 1, id);
     }
+    /**
+     * @brief Construct from an initial array.
+     *
+     * @param vec Initial values.
+     * @param op  Binary operation.
+     * @param id  Identity element of op.
+     */
     explicit SegmentTree(const std::vector<T>& vec, Op op, T id) noexcept
         : n(vec.size()), op(op), id(id) {
         sz = 1;
@@ -32,25 +47,57 @@ public:
         this->vec.assign(sz << 1, id);
         set_array(vec);
     }
+    /**
+     * @brief Access underlying element without updating.
+     *
+     * @param idx Index to access.
+     * @return Reference to the element.
+     */
     T& operator[](int idx) noexcept {
         return vec[idx + sz];
     }
+
+    /**
+     * @brief Set the value at a leaf without updating ancestors.
+     */
     void set_value(int idx, T val) noexcept {
         vec[idx + sz] = val;
     }
+
+    /**
+     * @brief Set the leaves from a range.
+     */
     template <class RandomIt>
     void set_array(RandomIt _begin, RandomIt _end) noexcept {
         std::copy(_begin, _end, vec.begin() + sz);
     }
+
+    /**
+     * @brief Set the leaves from a container.
+     */
     template <class Vec>
     void set_array(const Vec& v) noexcept {
         set_array(std::begin(v), std::end(v));
     }
+
+    /**
+     * @brief Build the tree from current leaves.
+     *
+     * Time complexity: \f$O(N)\f$.
+     */
     void build() noexcept {
         for (int i = sz - 1; i > 0; i--) {
             vec[i] = op(vec[i << 1], vec[(i << 1) | 1]);
         }
     }
+    /**
+     * @brief Point update of index idx.
+     *
+     * @param idx Index to update.
+     * @param val New value.
+     *
+     * Time complexity: \f$O(\log N)\f$.
+     */
     void update(int idx, T val) noexcept {
         idx += sz;
         vec[idx] = val;
@@ -58,6 +105,15 @@ public:
             vec[idx] = op(vec[idx << 1], vec[(idx << 1) | 1]);
         }
     }
+    /**
+     * @brief Range query on [l, r).
+     *
+     * @param l Left index (inclusive).
+     * @param r Right index (exclusive).
+     * @return Aggregated value on the range.
+     *
+     * Time complexity: \f$O(\log N)\f$.
+     */
     T query(int l, int r) const noexcept {
         T l_val = id, r_val = id;
         l += sz, r += sz - 1;
@@ -69,23 +125,47 @@ public:
         }
         return op(l_val, r_val);
     }
+    /**
+     * @brief Query the whole range.
+     */
     T query_all() const noexcept {
         return query(0, sz);
     }
-    // Return the largest x such that check(A[idx] op ... op A[x - 1]) == true
-    // complexity: O(log (n))
+    /**
+     * @brief Return largest x such that check(A[idx] op ... op A[x-1]) is true.
+     *
+     * @tparam F Predicate type.
+     * @param idx Starting index.
+     * @param check Monotone predicate on prefix aggregate.
+     * @return Largest position x (<= n).
+     *
+     * Time complexity: \f$O(\log N)\f$.
+     */
     template <class F>
     int max_right(int idx, const F& check) const noexcept {
         T acc = id;
         return idx < n ? _max_right(idx, check, acc, 1, 0, sz) : n;
     }
-    // Return the smallest x such that check(A[x] op ... op A[idx - 1]) == true
-    // complexity: O(log (n))
+
+    /**
+     * @brief Return smallest x such that check(A[x] op ... op A[idx-1]) is true.
+     *
+     * @tparam F Predicate type.
+     * @param idx Ending index.
+     * @param check Monotone predicate on suffix aggregate.
+     * @return Smallest position x (>= 0).
+     *
+     * Time complexity: \f$O(\log N)\f$.
+     */
     template <class F>
     int min_left(int idx, const F& check) const noexcept {
         T acc = id;
         return idx > 0 ? _min_left(idx, check, acc, 1, 0, sz) : 0;
     }
+
+    /**
+     * @brief Reset all values to the identity element.
+     */
     void reset() noexcept {
         std::fill(vec.begin(), vec.end(), id);
     }

@@ -2,13 +2,19 @@
 
 #include "kyopro-library/graph/template.h"
 
-// ダイクストラ法
-// 頂点sから各頂点への最短距離を求める
-// 時間計算量 : O((E + V)log(V))
-// arguments:
-//     (O) dist: dist[i] = s から i までの距離
-//     (I) g: 重み付きグラフ
-//     (I) s: 始点
+/**
+ * @brief Dijkstra's shortest path algorithm.
+ *
+ * Computes single-source shortest paths on a graph with non-negative
+ * edge weights.
+ *
+ * @tparam T Weight type.
+ * @param dist Output array storing distances from s.
+ * @param g Weighted graph adjacency list.
+ * @param s Source vertex index.
+ *
+ * Time complexity: \f$O((E+V) \log V)\f$.
+ */
 template <typename T>
 void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     constexpr T inf = std::numeric_limits<T>::max();
@@ -31,15 +37,19 @@ void dijkstra(std::vector<T>& dist, const WeightedGraph<T>& g, int s) {
     }
 }
 
-// ダイクストラ法(prev付き)
-// 頂点sから各頂点への最短距離を求める
-// prevも返すので経路を求めることができる
-// 時間計算量 : O((E + V)log(V))
-// arguments:
-//     (O) dist: dist[i] = s から i までの距離
-//     (O) prev: prev[i] = i のひとつ前の頂点番号
-//     (I) g: 重み付きグラフ
-//     (I) s: 始点
+/**
+ * @brief Dijkstra's algorithm that also records the previous vertex.
+ *
+ * Allows reconstruction of the shortest path tree.
+ *
+ * @tparam T Weight type.
+ * @param dist Output distances from s.
+ * @param prev Output parent array: prev[v] is the predecessor of v.
+ * @param g Weighted graph adjacency list.
+ * @param s Source vertex index.
+ *
+ * Time complexity: \f$O((E+V) \log V)\f$.
+ */
 template <typename T>
 void dijkstra(std::vector<T>& dist, std::vector<int>& prev,
               const WeightedGraph<T>& g, int s) {
